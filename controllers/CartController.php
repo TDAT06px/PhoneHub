@@ -8,7 +8,7 @@ class CartController extends Controller {
 
     public function __construct() {
         // Tải các model cần thiết
-        $this->checkAuth();
+        // Bỏ checkAuth() để cho phép thêm hàng khi chưa đăng nhập
         $this->cartModel = $this->loadModel('Cart');
         $this->productModel = $this->loadModel('Product');
     }
@@ -103,6 +103,9 @@ class CartController extends Controller {
      * URL: /cart/checkout
      */
     public function checkout() {
+        // Bắt buộc đăng nhập để đặt hàng
+        $this->checkAuth();
+        
         // Chỉ xử lý khi submit form POST
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             $this->redirect('cart/view');

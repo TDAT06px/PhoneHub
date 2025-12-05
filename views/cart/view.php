@@ -71,6 +71,14 @@
         </form> <div class="card mt-4 border-0 shadow-sm bg-light">
             <div class="card-body">
                 <h5 class="card-title mb-3">Phương thức thanh toán</h5>
+                
+                <?php if (!isset($_SESSION['user'])): ?>
+                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Thông báo:</strong> Vui lòng <a href="<?= BASE_URL ?>/auth/login" class="alert-link"><u>đăng nhập</u></a> hoặc <a href="<?= BASE_URL ?>/auth/register" class="alert-link"><u>đăng ký</u></a> để hoàn thành đơn hàng.
+                    </div>
+                <?php endif; ?>
+                
                 <form action="<?= BASE_URL ?>/cart/checkout" method="POST">
                     <div class="mb-3">
                         <div class="form-check">
@@ -88,9 +96,15 @@
                     </div>
                     
                     <div class="d-grid gap-2 d-md-flex justify-content-end">
-                        <button type="submit" class="btn btn-danger btn-lg" onclick="return confirm('Xác nhận đặt hàng?')">
-                            💳 Tiến hành đặt hàng
-                        </button>
+                        <?php if (isset($_SESSION['user'])): ?>
+                            <button type="submit" class="btn btn-danger btn-lg" onclick="return confirm('Xác nhận đặt hàng?')">
+                                💳 Tiến hành đặt hàng
+                            </button>
+                        <?php else: ?>
+                            <a href="<?= BASE_URL ?>/auth/login" class="btn btn-danger btn-lg">
+                                <i class="fas fa-sign-in-alt me-2"></i> Đăng nhập để đặt hàng
+                            </a>
+                        <?php endif; ?>
                     </div>
                 </form>
             </div>

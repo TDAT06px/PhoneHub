@@ -53,7 +53,10 @@ class AuthController extends Controller {
                 $error_message = 'Email hoặc mật khẩu không đúng!';
             }
         }
-        $this->loadView('auth/login', ['title' => 'Đăng nhập', 'error' => $error_message], 'auth');
+        // Dùng layout auth_layout thay vì 'auth'
+        require_once 'views/layout/auth_layout.php';
+        require_once 'views/auth/login.php';
+        require_once 'views/layout/auth_layout_footer.php';
     }
 
     public function logout() {
@@ -122,10 +125,69 @@ class AuthController extends Controller {
             }
         }
         
-        $this->loadView('auth/register', [
-            'title' => 'Đăng ký', 
-            'error' => $error_message,
-            'success' => $success_message
-        ], 'auth');
+        // Dùng layout auth_layout thay vì 'auth'
+        require_once 'views/layout/auth_layout.php';
+        require_once 'views/auth/register.php';
+        require_once 'views/layout/auth_layout_footer.php';
+    }
+
+    public function profile() {
+        // Bắt buộc đăng nhập để xem profile
+        $this->checkAuth();
+        
+        $user_id = $_SESSION['user']['id'];
+        $user = $this->userModel->getById($user_id);
+        
+        if (!$user) {
+            $this->redirect('auth/login');
+            return;
+        }
+        
+        $success = '';
+        $error = '';
+        
+        // Xử lý update thông tin
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $data = [
+                'ho_ten' => trim($_POST['ho_ten'] ?? ''),
+                'email' => trim($_POST['email'] ?? ''),
+                'so_dien_thoai' => trim($_POST['so_dien_thoai'] ?? ''),
+                'ngay_sinh' => $_POST['ngay_sinh'] ?? null,
+                'gioi_tinh' => $_POST['gioi_tinh'] ?? 'Khác'
+            ];
+            
+            // Validate dữ liệu
+            if (empty($data['ho_ten'])) {
+                $error = 'Họ và tên không được để trống!';
+            } elseif (empty($data['email'])) {
+                $error = 'Email không được để trống!';
+            } elseif (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+                $error = 'Email không hợp lệ!';
+            } else {
+                // Kiểm tra email không trùng với người khác
+                $check_email = $this->userModel->findByEmail($data['email']);
+                if ($check_email && $check_email['id'] != $user_id) {
+                    $error = 'Email này đã được sử dụng!';
+                } else {
+                    if ($this->userModel->update($user_id, $data)) {
+                        $success = 'Cập nhật thông tin thành công!';
+                        // Cập nhật session
+                        $_SESSION['user']['ho_ten'] = $data['ho_ten'];
+                        $_SESSION['user']['email'] = $data['email'];
+                        // Refresh user data
+                        $user = $this->userModel->getById($user_id);
+                    } else {
+                        $error = 'Cập nhật thất bại! Vui lòng thử lại.';
+                    }
+                }
+            }
+        }
+        
+        $this->loadView('auth/profile', [
+            'title' => 'Hồ sơ cá nhân',
+            'user' => $user,
+            'success' => $success,
+            'error' => $error
+        ]);
     }
 }

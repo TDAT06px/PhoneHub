@@ -39,16 +39,12 @@
                     </p>
                     
                     <div class="mt-auto">
-                        <div class="d-flex justify-content-between mb-2">
-                            <a href="<?= BASE_URL ?>/product/detail/<?= $row['id'] ?>" class="btn btn-outline-primary btn-sm">Xem</a>
-                            <a href="<?= BASE_URL ?>/product/edit/<?= $row['id'] ?>" class="btn btn-outline-warning btn-sm">✏️ Sửa</a>
-                            <a href="<?= BASE_URL ?>/product/delete/<?= $row['id'] ?>" 
-                               class="btn btn-outline-danger btn-sm" 
-                               onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này không?')">🗑️ Xóa</a>
-                        </div>
+                        <a href="<?= BASE_URL ?>/product/detail/<?= $row['id'] ?>" class="btn btn-outline-primary btn-sm w-100 mb-2">
+                            <i class="fas fa-eye me-1"></i>Xem chi tiết
+                        </a>
 
                         <a href="<?= BASE_URL ?>/cart/add/<?= $row['id'] ?>" class="btn btn-success w-100">
-                            🛒 Thêm vào giỏ hàng
+                            <i class="fas fa-shopping-cart me-1"></i>Thêm vào giỏ hàng
                         </a>
                     </div>
                 </div>
