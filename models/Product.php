@@ -30,8 +30,13 @@ class Product extends Database {
             $where_clauses[] = "gia <= :max_price";
             $params[':max_price'] = (float)$filters['max_price'];
         }
-        // Lọc theo đánh giá (sao)
-        if (!empty($filters['rating'])) {
+        // Lọc theo đánh giá (sao) - theo khoảng
+        if (!empty($filters['rating']) && is_array($filters['rating'])) {
+            $where_clauses[] = "avg_rating >= :rating_min AND avg_rating <= :rating_max";
+            $params[':rating_min'] = (float)$filters['rating']['min'];
+            $params[':rating_max'] = (float)$filters['rating']['max'];
+        } elseif (!empty($filters['rating'])) {
+            // Fallback cho trường hợp rating là số đơn giản (backward compatibility)
             $where_clauses[] = "avg_rating >= :rating";
             $params[':rating'] = (float)$filters['rating'];
         }

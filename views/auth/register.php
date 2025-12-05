@@ -2,7 +2,7 @@
 // /views/auth/register.php
 // Các biến $title, $error, $success được truyền từ AuthController::register()
 ?>
-<div classs="row">
+<div class="row">
     <div class="col-lg-6 col-md-9 mx-auto">
         <div class="card shadow border-0">
             <div class="card-body p-4 p-md-5">

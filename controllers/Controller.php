@@ -18,77 +18,101 @@ abstract class Controller {
     }
 
     /**
-     * Tải View (Giao diện)
-     * @param string $viewName Tên file view (ví dụ: 'product/list')
-     * @param array $data Mảng dữ liệu truyền sang view
-     * @param string $layout Layout sử dụng ('main', 'auth', hoặc 'none')
+     * Tải View (Giao diện) - Đã nâng cấp để tự tìm file Admin
      */
     protected function loadView($viewName, $data = [], $layout = 'main') {
-        // Giải nén mảng data thành các biến riêng lẻ
+        // Giải nén dữ liệu
         extract($data);
         
+        // Đường dẫn file nội dung (ví dụ: views/admin/orders.php)
         $viewPath = 'views/' . $viewName . '.php';
 
         if (file_exists($viewPath)) {
             
-            // 1. Nếu layout là 'none' -> Chỉ tải view, không Header/Footer
-            // (Dùng cho trang 404, Ajax, hoặc trang Landing page riêng biệt)
+            // 1. TRƯỜNG HỢP: Không dùng layout
             if ($layout === 'none') {
                 require_once $viewPath;
             } 
-            // 2. Các trường hợp còn lại -> Tải Header + View + Footer
-            else {
-                // Chuẩn hóa tên layout
-                $layout = ($layout == 'main') ? 'default' : $layout;
+            
+            // 2. TRƯỜNG HỢP: Layout ADMIN
+            elseif ($layout === 'admin') {
+                // Set biến $child_view để admin layout có thể include view con
+                $child_view = $viewPath;
+                
+                // Code này sẽ thử tìm file admin.php ở 3 chỗ khác nhau
+                // Chỗ nào có thì nó sẽ lấy, bạn không lo sai tên thư mục nữa.
+                
+                if (file_exists('views/layouts/admin.php')) {
+                    require_once 'views/layouts/admin.php';      // Ưu tiên 1: Thư mục layouts (có s)
+                } 
+                elseif (file_exists('views/layout/admin.php')) {
+                    require_once 'views/layout/admin.php';       // Ưu tiên 2: Thư mục layout (không s)
+                } 
+                else {
+                    // Nếu tìm cả 3 chỗ đều không thấy thì mới báo lỗi
+                    die("<h3>Lỗi cấu trúc thư mục:</h3>
+                         <p>Hệ thống không tìm thấy file giao diện Admin.</p>
+                         <p>Vui lòng tạo file <b>admin.php</b> và đặt vào một trong các đường dẫn sau:</p>
+                         <ul>
+                            <li>views/layouts/admin.php</li>
+                            <li>views/layout/admin.php</li>
+                         </ul>");
+                }
+            }
 
-                // Tải Header
-                if ($layout == 'default') {
-                    require_once 'views/layout/header.php';
-                } elseif ($layout == 'auth') {
-                    require_once 'views/layout/header_auth.php';
+            // 3. TRƯỜNG HỢP: Layout Trang chủ & Auth
+            else {
+                // Tự động tìm Header
+                if ($layout === 'auth') {
+                    // Tìm header cho Auth
+                    if (file_exists('views/layout/header_auth.php')) require_once 'views/layout/header_auth.php';
+                } else {
+                    // Tìm header mặc định (Trang chủ)
+                    if (file_exists('views/layout/header.php')) require_once 'views/layout/header.php';
                 }
                 
                 // Tải nội dung chính
                 require_once $viewPath;
                 
-                // Tải Footer
-                if ($layout == 'default') {
-                    require_once 'views/layout/footer.php';
-                } elseif ($layout == 'auth') {
-                    require_once 'views/layout/footer_auth.php';
+                // Tự động tìm Footer
+                if ($layout === 'auth') {
+                    if (file_exists('views/layout/footer_auth.php')) require_once 'views/layout/footer_auth.php';
+                } else {
+                    if (file_exists('views/layout/footer.php')) require_once 'views/layout/footer.php';
                 }
             }
+
         } else {
-            // Nếu không tìm thấy file view, dừng và báo lỗi
-            die("Lỗi hệ thống: Không tìm thấy file view '$viewPath'");
+            die("Lỗi hệ thống: Không tìm thấy file view nội dung tại '$viewPath'");
         }
     }
 
     /**
-     * Chuyển hướng trang (Redirect)
+     * Chuyển hướng
      */
     protected function redirect($url) {
-        // Nếu $url rỗng, về trang chủ. Nếu không, nối vào BASE_URL
         $target = ($url === '') ? BASE_URL : BASE_URL . '/' . ltrim($url, '/');
         header('Location: ' . $target);
-        exit; // Quan trọng: Dừng code ngay sau khi redirect
+        exit; 
     }
 
     /**
-     * Hàm hiển thị lỗi 404
-     * Sẽ gọi view 'error/404' với layout 'none' để hiển thị toàn màn hình
+     * Báo lỗi 404
      */
     public function error404() {
-        // Gửi mã lỗi 404 về trình duyệt
         http_response_code(404);
-        
-        // Gọi view 404 đẹp, không dùng header/footer chung
-        $this->loadView('error/404', [], 'none'); 
+        if (file_exists('views/404.php')) {
+            $this->loadView('404', [], 'none');
+        } elseif (file_exists('views/error/404.php')) {
+             $this->loadView('error/404', [], 'none');
+        } else {
+            echo "404 Not Found";
+        }
         exit;
     }
 
     /**
-     * Kiểm tra đăng nhập (Bảo vệ các trang cần User)
+     * Kiểm tra Auth
      */
     protected function checkAuth() {
         if (!isset($_SESSION['user'])) {
@@ -97,18 +121,31 @@ abstract class Controller {
     }
     
     /**
-     * Kiểm tra quyền Admin (Bảo vệ trang quản trị)
+     * Kiểm tra Admin - Cải thiện để chắc chắn chỉ admin mới vào được
      */
     protected function checkAdmin() {
-        // 1. Phải đăng nhập
-        if (!isset($_SESSION['user'])) {
-            $this->redirect('auth/login'); 
+        // Kiểm tra session tồn tại
+        if (!isset($_SESSION['user']) || empty($_SESSION['user'])) {
+            $_SESSION['redirect_after_login'] = $_SERVER['REQUEST_URI'] ?? '';
+            $this->redirect('auth/login');
+            exit;
         }
         
-        // 2. Phải là role admin
-        if (($_SESSION['user']['role'] ?? '') !== 'admin') {
-            // Nếu cố tình vào, cho ra đảo (404) để giấu trang admin
-            $this->error404(); 
+        // Kiểm tra thêm: đảm bảo session không bị giả mạo
+        if (empty($_SESSION['user']['id']) || empty($_SESSION['user']['email'])) {
+            session_destroy();
+            $this->redirect('auth/login');
+            exit;
+        }
+        
+        // Kiểm tra role phải chính xác là 'admin' (không phải 'user' hay 'staff')
+        $userRole = trim($_SESSION['user']['role'] ?? '');
+        if ($userRole !== 'admin') {
+            // Nếu không phải admin, chuyển về trang chủ và dừng
+            $_SESSION['error'] = 'Bạn không có quyền truy cập trang quản trị!';
+            $this->redirect('');
+            exit;
         }
     }
 }
+?>

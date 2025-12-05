@@ -32,7 +32,7 @@ class User extends Database {
         $params = [
             ':ho_ten'        => $data['ho_ten'],
             ':email'         => $data['email'],
-            ':so_dien_thoai' => $data['so_dien_thoai'] ?? null, // Thêm ?? null để tránh lỗi nếu thiếu
+            ':so_dien_thoai' => $data['so_dien_thoai'] ?? null,
             ':mat_khau'      => $hashed_password,
             ':gioi_tinh'     => $data['gioi_tinh'] ?? 'Khác',
             ':ngay_sinh'     => $data['ngay_sinh'] ?? null,
@@ -68,17 +68,32 @@ class User extends Database {
 
     /**
      * Kiểm tra đăng nhập
+     * (Đã sửa: Xóa hàm bị trùng và giữ lại hàm này)
      */
     public function login($email, $password) {
-        $user = $this->findByEmail($email);
-
-        if ($user) {
-            // So sánh mật khẩu nhập vào với mật khẩu đã mã hóa trong DB
-            if (password_verify($password, $user['mat_khau'])) {
-                return $user;
-            }
+        $sql = "SELECT * FROM nguoidung WHERE email = :email";
+        $user = self::query($sql, [':email' => $email], false);
+        
+        if ($user && password_verify($password, $user['mat_khau'])) {
+            return $user;
         }
         return false;
+    }
+
+    // 2. Lấy danh sách user (trừ chính mình ra để không tự khóa mình)
+    public function getAllUsers($exclude_id) {
+        $sql = "SELECT * FROM nguoidung WHERE id != :id ORDER BY id DESC";
+        return self::query($sql, [':id' => $exclude_id]);
+    }
+
+    // 3. Admin cập nhật quyền và trạng thái User
+    public function updateRoleAndStatus($id, $role, $status) {
+        $sql = "UPDATE nguoidung SET role = :role, trang_thai = :status WHERE id = :id";
+        return self::execute($sql, [
+            ':role' => $role,
+            ':status' => $status, // 1: Active, 0: Block
+            ':id' => $id
+        ]);
     }
 }
 ?>

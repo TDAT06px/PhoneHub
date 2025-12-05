@@ -81,9 +81,10 @@
                                 
                                 <?php if (($_SESSION['user']['role'] ?? '') === 'admin'): ?>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><h6 class="dropdown-header text-danger"><i class="fas fa-shield-alt"></i> Quản trị viên</h6></li>
-                                    <li><a class="dropdown-item fw-bold text-primary" href="<?= BASE_URL ?>/product/add"><i class="fas fa-plus-circle me-2"></i> Thêm sản phẩm mới</a></li>
-                                    <li><a class="dropdown-item fw-bold text-primary" href="<?= BASE_URL ?>/product/list"><i class="fas fa-list me-2"></i> Quản lý sản phẩm</a></li>
+                                    <li><h6 class="dropdown-header text-danger"><i class="fas fa-shield-alt me-2"></i> Quản trị viên</h6></li>
+                                    <li><a class="dropdown-item text-danger fw-bold" href="<?= BASE_URL ?>/admin/dashboard"><i class="fas fa-tachometer-alt me-2"></i> Quản trị viên</a></li>
+                                    <li><a class="dropdown-item text-danger" href="<?= BASE_URL ?>/product/add"><i class="fas fa-plus-circle me-2"></i> Thêm sản phẩm mới</a></li>
+                                    <li><a class="dropdown-item text-danger" href="<?= BASE_URL ?>/product/list"><i class="fas fa-list me-2"></i> Quản lý sản phẩm</a></li>
                                 <?php endif; ?>
                                 
                                 <li><hr class="dropdown-divider"></li>

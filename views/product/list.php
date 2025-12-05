@@ -10,7 +10,14 @@ if (!empty($base_query)) $base_query .= '&';
 $category_id = isset($_GET['category']) ? (int)$_GET['category'] : null;
 $min_price = $_GET['min_price'] ?? '';
 $max_price = $_GET['max_price'] ?? '';
-$rating = $_GET['rating'] ?? null;
+// Xử lý rating theo khoảng
+$rating = null;
+if (isset($_GET['rating_min']) && isset($_GET['rating_max'])) {
+    $rating = [
+        'min' => (float)$_GET['rating_min'],
+        'max' => (float)$_GET['rating_max']
+    ];
+}
 
 // 2. Kiểm tra quyền Admin
 $is_admin = isset($_SESSION['user']['role']) && $_SESSION['user']['role'] === 'admin'; 
@@ -209,19 +216,34 @@ $is_admin = isset($_SESSION['user']['role']) && $_SESSION['user']['role'] === 'a
         <div class="card shadow-sm border-0">
             <div class="card-header bg-light"><h6 class="mb-0 fw-bold">Đánh giá</h6></div>
             <div class="list-group list-group-flush">
-                <?php for($s=5; $s>=1; $s--): // Hiển thị từ 5 xuống 1 sao
-                    $r_params = $current_params; $r_params['rating'] = $s;
+                <?php 
+                // Định nghĩa các khoảng sao: [min, max, label, stars]
+                $rating_ranges = [
+                    ['min' => 5.0, 'max' => 5.0, 'label' => '5 sao', 'stars' => 5],
+                    ['min' => 4.0, 'max' => 4.9, 'label' => '4 - 4.9 sao', 'stars' => 4],
+                    ['min' => 3.0, 'max' => 3.9, 'label' => '3 - 3.9 sao', 'stars' => 3],
+                    ['min' => 2.0, 'max' => 2.9, 'label' => '2 - 2.9 sao', 'stars' => 2],
+                    ['min' => 1.0, 'max' => 1.9, 'label' => '1 - 1.9 sao', 'stars' => 1]
+                ];
+                
+                foreach($rating_ranges as $range): 
+                    $r_params = $current_params; 
+                    $r_params['rating_min'] = $range['min'];
+                    $r_params['rating_max'] = $range['max'];
+                    $is_active = ($rating && isset($rating['min']) && $rating['min'] == $range['min'] && $rating['max'] == $range['max']);
                 ?>
-                <a href="?<?= http_build_query($r_params) ?>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center <?= ($rating == $s) ? 'bg-light text-primary fw-bold' : '' ?>">
-                    <span class="text-warning">
-                        <?= str_repeat('<i class="fas fa-star"></i>', $s) . str_repeat('<i class="far fa-star"></i>', 5-$s) ?>
+                <a href="?<?= http_build_query($r_params) ?>" class="list-group-item list-group-item-action d-flex align-items-center <?= $is_active ? 'bg-light text-primary fw-bold' : '' ?>">
+                    <span class="text-warning me-2">
+                        <?= str_repeat('<i class="fas fa-star"></i>', $range['stars']) . str_repeat('<i class="far fa-star"></i>', 5-$range['stars']) ?>
                     </span>
-                    <span class="small text-muted">trở lên</span>
+                    <span class="text-dark small"><?= $range['label'] ?></span>
                 </a>
-                <?php endfor; ?>
+                <?php endforeach; ?>
                 
                 <?php if ($rating): 
-                    $clear_r = $current_params; unset($clear_r['rating']);
+                    $clear_r = $current_params; 
+                    unset($clear_r['rating_min']);
+                    unset($clear_r['rating_max']);
                 ?>
                 <a href="?<?= http_build_query($clear_r) ?>" class="list-group-item list-group-item-action text-danger text-center small mt-2 border-top">
                     <i class="fas fa-times me-1"></i> Bỏ lọc đánh giá

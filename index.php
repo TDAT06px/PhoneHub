@@ -41,16 +41,23 @@ $url = isset($_GET['url']) ? rtrim($_GET['url'], '/') : '';
 $urlParts = explode('/', $url);
 
 // A. Xác định Controller
-$controllerName = !empty($urlParts[0]) ? ucfirst($urlParts[0]) . 'Controller' : 'ProductController';
-
-// B. Xác định Action
-if (isset($urlParts[1]) && $urlParts[1] != '') {
-    $actionName = $urlParts[1];
+// Xử lý đặc biệt cho admin routes
+if (!empty($urlParts[0]) && $urlParts[0] === 'admin') {
+    $controllerName = 'AdminController';
+    // Action mặc định cho admin là dashboard
+    $actionName = isset($urlParts[1]) && !empty($urlParts[1]) ? $urlParts[1] : 'dashboard';
 } else {
-    // Action mặc định
-    if ($controllerName == 'CartController') $actionName = 'view';
-    elseif ($controllerName == 'AuthController') $actionName = 'login';
-    else $actionName = 'list';
+    $controllerName = !empty($urlParts[0]) ? ucfirst($urlParts[0]) . 'Controller' : 'ProductController';
+    
+    // B. Xác định Action
+    if (isset($urlParts[1]) && $urlParts[1] != '') {
+        $actionName = $urlParts[1];
+    } else {
+        // Action mặc định
+        if ($controllerName == 'CartController') $actionName = 'view';
+        elseif ($controllerName == 'AuthController') $actionName = 'login';
+        else $actionName = 'list';
+    }
 }
 
 // C. Tham số
