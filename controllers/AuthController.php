@@ -60,7 +60,8 @@ class AuthController extends Controller {
     }
 
     public function logout() {
-        session_destroy();
+        // Chỉ xóa user session, giữ lại giỏ hàng
+        unset($_SESSION['user']);
         header("Location: " . BASE_URL . "/auth/login");
         exit;
     }

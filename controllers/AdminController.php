@@ -113,15 +113,71 @@ class AdminController extends Controller {
     public function users() {
         $userModel = $this->loadModel('User');
         
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['role'], $_POST['trang_thai'])) {
-            // Cập nhật role và trạng thái người dùng
-            $db = new Database();
-            $db->execute("UPDATE nguoidung SET role=:role, trang_thai=:trang_thai WHERE id=:id", [
-                ':role' => $_POST['role'], 
-                ':trang_thai' => $_POST['trang_thai'], 
-                ':id' => (int)$_POST['user_id']
-            ]);
-            $this->redirect('admin/users');
+        // Xử lý tạo tài khoản mới
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
+            $action = $_POST['action'];
+            
+            if ($action === 'create') {
+                // Tạo tài khoản mới
+                $ho_ten = trim($_POST['ho_ten'] ?? '');
+                $email = trim($_POST['email'] ?? '');
+                $mat_khau = $_POST['mat_khau'] ?? '';
+                $role = $_POST['role'] ?? 'user';
+                
+                // Validate
+                $error = '';
+                if (empty($ho_ten)) $error = 'Tên không được để trống!';
+                elseif (empty($email)) $error = 'Email không được để trống!';
+                elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) $error = 'Email không hợp lệ!';
+                elseif (empty($mat_khau)) $error = 'Mật khẩu không được để trống!';
+                elseif (strlen($mat_khau) < 6) $error = 'Mật khẩu phải có ít nhất 6 ký tự!';
+                elseif (!in_array($role, ['user', 'admin'])) $error = 'Vai trò không hợp lệ!';
+                else {
+                    // Kiểm tra email đã tồn tại
+                    $existing = $userModel->findByEmail($email);
+                    if ($existing) $error = 'Email này đã được sử dụng!';
+                }
+                
+                if (!$error) {
+                    // Tạo tài khoản
+                    $userModel->create([
+                        'ho_ten' => $ho_ten,
+                        'email' => $email,
+                        'mat_khau' => $mat_khau,
+                        'role' => $role,
+                        'so_dien_thoai' => null,
+                        'gioi_tinh' => 'Khác',
+                        'ngay_sinh' => null
+                    ]);
+                    $_SESSION['success'] = 'Tạo tài khoản thành công!';
+                    $this->redirect('admin/users');
+                } else {
+                    $_SESSION['error'] = $error;
+                    $this->redirect('admin/users');
+                }
+            } elseif ($action === 'update') {
+                // Cập nhật role và trạng thái người dùng
+                $db = new Database();
+                $db->execute("UPDATE nguoidung SET role=:role, trang_thai=:trang_thai WHERE id=:id", [
+                    ':role' => $_POST['role'], 
+                    ':trang_thai' => $_POST['trang_thai'], 
+                    ':id' => (int)$_POST['user_id']
+                ]);
+                $_SESSION['success'] = 'Cập nhật thông tin thành công!';
+                $this->redirect('admin/users');
+            } elseif ($action === 'delete') {
+                // Xóa tài khoản người dùng
+                $user_id = (int)$_POST['user_id'];
+                // Không cho phép xóa tài khoản admin hiện tại
+                if ($user_id === $_SESSION['user']['id']) {
+                    $_SESSION['error'] = 'Không thể xóa tài khoản của chính mình!';
+                } else {
+                    $db = new Database();
+                    $db->execute("DELETE FROM nguoidung WHERE id=:id", [':id' => $user_id]);
+                    $_SESSION['success'] = 'Xóa tài khoản thành công!';
+                }
+                $this->redirect('admin/users');
+            }
         }
 
         $users = $userModel->getAllUsers($_SESSION['user']['id']);
@@ -129,7 +185,17 @@ class AdminController extends Controller {
         if (!is_array($users)) {
             $users = [];
         }
-        $this->loadView('admin/users', ['title' => 'Quản lý Nhân sự', 'users' => $users], 'admin');
+        
+        $success = $_SESSION['success'] ?? '';
+        $error = $_SESSION['error'] ?? '';
+        unset($_SESSION['success'], $_SESSION['error']);
+        
+        $this->loadView('admin/users', [
+            'title' => 'Quản lý Nhân sự', 
+            'users' => $users,
+            'success' => $success,
+            'error' => $error
+        ], 'admin');
     }
 
     // Quản lý kho
