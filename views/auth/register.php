@@ -85,6 +85,21 @@
                     required>
             </div>
 
+            <!-- Nhập lại mật khẩu -->
+            <div class="mb-4">
+                <label for="mat_khau_confirm" class="form-label">
+                    <i class="fas fa-lock me-2" style="color: #E91E63;"></i>Nhập lại mật khẩu
+                </label>
+                <input 
+                    type="password" 
+                    class="form-control" 
+                    id="mat_khau_confirm" 
+                    name="mat_khau_confirm" 
+                    placeholder="Nhập lại mật khẩu"
+                    required>
+                <small class="form-text text-muted d-block mt-2" id="passwordMatch"></small>
+            </div>
+
             <!-- Ngày sinh và Giới tính -->
             <div class="form-row-group mb-4">
                 <div>
@@ -109,7 +124,7 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-auth w-100 mb-4">
+            <button type="submit" class="btn btn-auth w-100 mb-4" id="submitBtn">
                 <i class="fas fa-user-plus me-2"></i>Đăng ký
             </button>
         </form>
@@ -122,3 +137,39 @@
         </p>
     </div>
 </div>
+
+<script>
+    // Kiểm tra confirm password
+    const passwordInput = document.getElementById('mat_khau');
+    const confirmInput = document.getElementById('mat_khau_confirm');
+    const matchText = document.getElementById('passwordMatch');
+    const submitBtn = document.getElementById('submitBtn');
+
+    function checkPassword() {
+        if (passwordInput.value === '' || confirmInput.value === '') {
+            matchText.innerHTML = '';
+            submitBtn.disabled = false;
+            return;
+        }
+
+        if (passwordInput.value === confirmInput.value) {
+            matchText.innerHTML = '<i class="fas fa-check-circle text-success me-1"></i><span class="text-success fw-bold">Mật khẩu khớp</span>';
+            submitBtn.disabled = false;
+        } else {
+            matchText.innerHTML = '<i class="fas fa-times-circle text-danger me-1"></i><span class="text-danger fw-bold">Mật khẩu không khớp!</span>';
+            submitBtn.disabled = true;
+        }
+    }
+
+    passwordInput.addEventListener('input', checkPassword);
+    confirmInput.addEventListener('input', checkPassword);
+
+    // Kiểm tra độ dài password
+    passwordInput.addEventListener('input', function() {
+        if (this.value.length < 6 && this.value.length > 0) {
+            this.classList.add('is-invalid');
+        } else {
+            this.classList.remove('is-invalid');
+        }
+    });
+</script>

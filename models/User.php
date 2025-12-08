@@ -67,6 +67,15 @@ class User extends Database {
     }
 
     /**
+     * Đặt lại mật khẩu (hashing)
+     */
+    public function setPassword($id, $newPassword) {
+        $hashed = password_hash($newPassword, PASSWORD_DEFAULT);
+        $sql = "UPDATE nguoidung SET mat_khau = :mat_khau WHERE id = :id";
+        return self::execute($sql, [':mat_khau' => $hashed, ':id' => $id]);
+    }
+
+    /**
      * Kiểm tra đăng nhập
      * (Đã sửa: Xóa hàm bị trùng và giữ lại hàm này)
      */

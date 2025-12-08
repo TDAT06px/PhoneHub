@@ -1,4 +1,49 @@
 <div class="card"><div class="card-body">
+<?php
+// Fallback to GET query messages if controller didn't provide $success/$error
+$success = $success ?? ($_GET['success'] ?? '');
+$error = $error ?? ($_GET['error'] ?? '');
+?>
+
+<!-- Nút Đổi Mật Khẩu (Admin) -->
+<div class="mb-4">
+    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
+        <i class="fas fa-key me-2"></i> Đặt lại mật khẩu người dùng
+    </button>
+</div>
+
+<!-- Modal Đổi Mật Khẩu -->
+<div class="modal fade" id="changePasswordModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header bg-warning text-dark border-0">
+                <h5 class="modal-title fw-bold"><i class="fas fa-key me-2"></i>Đặt lại mật khẩu người dùng</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="<?= BASE_URL ?>/admin/resetPassword" method="POST">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="resetEmail" class="form-label fw-semibold">Email người dùng</label>
+                        <input type="email" class="form-control form-control-lg" id="resetEmail" name="email" placeholder="Nhập email" required>
+                        <small class="form-text text-muted">Chọn email của người dùng cần đặt lại mật khẩu</small>
+                    </div>
+                    <div class="mb-3">
+                        <label for="newPassword" class="form-label fw-semibold">Mật khẩu mới</label>
+                        <input type="text" class="form-control form-control-lg" id="newPassword" name="new_password" placeholder="Nhập mật khẩu mới (tối thiểu 6 ký tự)" required minlength="6">
+                        <small class="form-text text-muted">Mật khẩu tạm sẽ được gửi cho người dùng</small>
+                    </div>
+                    <div class="alert alert-info alert-sm" role="alert">
+                        <i class="fas fa-info-circle me-2"></i><strong>Lưu ý:</strong> Người dùng cần đổi mật khẩu ngay sau khi đăng nhập lần đầu
+                    </div>
+                </div>
+                <div class="modal-footer border-top">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-warning btn-lg"><i class="fas fa-save me-2"></i>Lưu mật khẩu mới</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 <?php if (!empty($success)): ?>
     <div class="alert alert-success alert-dismissible fade show" role="alert">

@@ -39,7 +39,7 @@
         <ul class="components">
             <li><a href="<?= BASE_URL ?>/admin/dashboard" class="<?= (strpos($_SERVER['REQUEST_URI'], 'dashboard')!==false)?'active':'' ?>"><i class="fas fa-chart-pie me-2"></i> Tổng quan</a></li>
             <li><a href="<?= BASE_URL ?>/admin/orders" class="<?= (strpos($_SERVER['REQUEST_URI'], 'orders')!==false)?'active':'' ?>"><i class="fas fa-shopping-cart me-2"></i> Đơn hàng</a></li>
-            <li><a href="<?= BASE_URL ?>/product/list" target="_blank"><i class="fas fa-box me-2"></i> Xem trang Sản phẩm</a></li>
+            <!-- Removed duplicate shop link to avoid redundancy (keep 'Về Shop' instead) -->
             <li><a href="<?= BASE_URL ?>/admin/users" class="<?= (strpos($_SERVER['REQUEST_URI'], 'users')!==false)?'active':'' ?>"><i class="fas fa-users me-2"></i> Nhân sự</a></li>
             <li><a href="<?= BASE_URL ?>/admin/inventory" class="<?= (strpos($_SERVER['REQUEST_URI'], 'inventory')!==false)?'active':'' ?>"><i class="fas fa-warehouse me-2"></i> Kho hàng</a></li>
             <li><a href="<?= BASE_URL ?>/admin/revenue" class="<?= (strpos($_SERVER['REQUEST_URI'], 'revenue')!==false)?'active':'' ?>"><i class="fas fa-coins me-2"></i> Doanh thu</a></li>
@@ -64,7 +64,19 @@
         </div>
 
         <div class="main-content">
-            <?php 
+            <?php
+                // Flash messages (in case controller set them via $success/$error or in session)
+                $flashSuccess = $success ?? ($_SESSION['success'] ?? '');
+                $flashError = $error ?? ($_SESSION['error'] ?? '');
+                if (!empty($flashSuccess)) {
+                    echo '<div class="alert alert-success">' . htmlspecialchars($flashSuccess) . '</div>';
+                }
+                if (!empty($flashError)) {
+                    echo '<div class="alert alert-danger">' . htmlspecialchars($flashError) . '</div>';
+                }
+                // Clear session flashes if any
+                unset($_SESSION['success'], $_SESSION['error']);
+
                 // Phần này sẽ hiển thị nội dung của các trang con (dashboard, orders...)
                 if (isset($child_view) && file_exists($child_view)) {
                     require_once $child_view;

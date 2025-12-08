@@ -9,16 +9,15 @@ USE `DoAnCoSo2`;
 -- 2. TẠO CẤU TRÚC BẢNG
 -- ========================================================
 
--- Bảng Người dùng (Đã cập nhật cho Admin Panel)
--- Thêm: role 'staff', cột 'trang_thai'
+-- Bảng Người dùng
 CREATE TABLE `nguoidung` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `ho_ten` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL UNIQUE,
   `so_dien_thoai` varchar(15) NULL,
   `mat_khau` varchar(255) NOT NULL,
-  `role` enum('admin','staff','user') NOT NULL DEFAULT 'user', -- Đã thêm quyền staff
-  `trang_thai` tinyint(1) NOT NULL DEFAULT 1 COMMENT '1: Active, 0: Blocked', -- Đã thêm trạng thái
+  `role` enum('admin','staff','user') NOT NULL DEFAULT 'user',
+  `trang_thai` tinyint(1) NOT NULL DEFAULT 1 COMMENT '1: Active, 0: Blocked',
   `gioi_tinh` enum('Nam','Nữ','Khác') NULL DEFAULT 'Khác',
   `ngay_sinh` date NULL,
   `ngay_tao` timestamp NOT NULL DEFAULT current_timestamp(),
@@ -35,7 +34,7 @@ CREATE TABLE `danhmuc` (
   CONSTRAINT `fk_danhmuc_parent` FOREIGN KEY (`parent_id`) REFERENCES `danhmuc` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Bảng Sản phẩm (Có quản lý tồn kho: so_luong_ton)
+-- Bảng Sản phẩm
 CREATE TABLE `sanpham` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `ten_sanpham` varchar(255) NOT NULL,
@@ -53,7 +52,7 @@ CREATE TABLE `sanpham` (
   CONSTRAINT `fk_sanpham_danhmuc` FOREIGN KEY (`id_danhmuc`) REFERENCES `danhmuc` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Bảng Đơn hàng (Quản lý doanh thu)
+-- Bảng Đơn hàng
 CREATE TABLE `donhang` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `id_nguoidung` int(11) NOT NULL,
@@ -94,6 +93,7 @@ CREATE TABLE `binhluan` (
   CONSTRAINT `fk_binhluan_sanpham` FOREIGN KEY (`id_sanpham`) REFERENCES `sanpham` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+
 -- ========================================================
 -- 3. THÊM DỮ LIỆU MẪU (SEEDING)
 -- ========================================================
@@ -122,9 +122,8 @@ INSERT INTO `danhmuc` (`id`, `parent_id`, `ten_danhmuc`) VALUES
 (13, 3, 'Sạc cáp'),
 (14, 3, 'Chuột & Phím');
 
--- C. Sản phẩm (Đầy đủ 50 sản phẩm)
+-- C. Sản phẩm (50 sản phẩm)
 INSERT INTO `sanpham` (`id`, `ten_sanpham`, `gia`, `hinhanh`, `mo_ta`, `thong_so_ky_thuat`, `so_luong_ton`, `id_danhmuc`, `avg_rating`) VALUES
--- iPhone (ID: 4)
 (1, 'iPhone 15 Pro Max 256GB', 34990000, 'iphone15promax.jpg', 'Khung Titan, Chip A17 Pro mạnh mẽ nhất.', 'Màn hình: 6.7 inch OLED\nChip: A17 Pro', 50, 4, 0),
 (2, 'iPhone 15 Plus 128GB', 25990000, 'iphone15plus.jpg', 'Màn hình lớn, pin trâu, Dynamic Island.', 'Màn hình: 6.7 inch OLED\nChip: A16 Bionic', 30, 4, 0),
 (3, 'iPhone 14 Pro Max 128GB', 27490000, 'iphone14promax.jpg', 'Màu tím Deep Purple sang trọng.', 'Màn hình: 6.7 inch OLED\nChip: A16 Bionic', 20, 4, 0),
@@ -133,8 +132,6 @@ INSERT INTO `sanpham` (`id`, `ten_sanpham`, `gia`, `hinhanh`, `mo_ta`, `thong_so
 (6, 'iPhone 12 64GB', 11990000, 'iphone12.jpg', 'Màn hình OLED, thiết kế vuông vức.', 'Màn hình: 6.1 inch OLED\nChip: A14 Bionic', 40, 4, 0),
 (7, 'iPhone 15 128GB', 22990000, 'iphone15.jpg', 'Camera 48MP, cổng USB-C tiện lợi.', 'Màn hình: 6.1 inch OLED\nChip: A16 Bionic', 60, 4, 0),
 (8, 'iPhone SE 2022', 10990000, 'iphonese.jpg', 'Nhỏ gọn, mạnh mẽ với chip A15.', 'Màn hình: 4.7 inch LCD\nChip: A15 Bionic', 25, 4, 0),
-
--- Samsung (ID: 5)
 (9, 'Samsung Galaxy S24 Ultra', 29990000, 's24ultra.jpg', 'Quyền năng Galaxy AI, bút S-Pen.', 'Màn hình: 6.8 inch AMOLED\nChip: Snapdragon 8 Gen 3', 40, 5, 0),
 (10, 'Samsung Galaxy Z Flip5', 16990000, 'zflip5.jpg', 'Gập mở linh hoạt, màn hình phụ lớn.', 'Màn hình: 6.7 inch AMOLED\nChip: Snapdragon 8 Gen 2', 25, 5, 0),
 (11, 'Samsung Galaxy A55 5G', 9690000, 'a55.jpg', 'Thiết kế kim loại, chụp đêm ấn tượng.', 'Màn hình: 6.6 inch AMOLED\nChip: Exynos 1480', 60, 5, 0),
@@ -142,15 +139,11 @@ INSERT INTO `sanpham` (`id`, `ten_sanpham`, `gia`, `hinhanh`, `mo_ta`, `thong_so
 (13, 'Samsung Galaxy M15', 4690000, 'm15.jpg', 'Pin khủng 6000mAh.', 'Màn hình: 6.5 inch AMOLED\nChip: Dimensity 6100+', 80, 5, 0),
 (14, 'Samsung Galaxy Z Fold5', 30990000, 'zfold5.jpg', 'Đa nhiệm mạnh mẽ như PC.', 'Màn hình: 7.6 inch AMOLED\nChip: Snapdragon 8 Gen 2', 15, 5, 0),
 (15, 'Samsung Galaxy A35 5G', 7990000, 'a35.jpg', 'Màn hình 120Hz mượt mà.', 'Màn hình: 6.6 inch AMOLED\nChip: Exynos 1380', 50, 5, 0),
-
--- Xiaomi (ID: 6) & Oppo (ID: 7)
 (16, 'Xiaomi 14 Ultra', 29990000, 'mi14ultra.jpg', 'Đỉnh cao nhiếp ảnh Leica.', 'Màn hình: 6.73 inch AMOLED\nChip: Snapdragon 8 Gen 3', 10, 6, 0),
 (17, 'Xiaomi Redmi Note 13', 4990000, 'redminote13.jpg', 'Viền siêu mỏng, camera 108MP.', 'Màn hình: 6.67 inch AMOLED\nChip: Snapdragon 685', 100, 6, 0),
 (18, 'Xiaomi Poco X6 Pro', 8490000, 'pocox6.jpg', 'Chiến game đỉnh cao.', 'Màn hình: 6.67 inch AMOLED\nChip: Dimensity 8300 Ultra', 45, 6, 0),
 (19, 'OPPO Find N3 Flip', 22990000, 'n3flip.jpg', 'Camera Hasselblad chuyên nghiệp.', 'Màn hình: 6.8 inch AMOLED\nChip: Dimensity 9200', 15, 7, 0),
 (20, 'OPPO Reno11 F', 8990000, 'reno11f.jpg', 'Chuyên gia chân dung.', 'Màn hình: 6.7 inch AMOLED\nChip: Dimensity 7050', 55, 7, 0),
-
--- Laptop (ID: 8, 9, 10, 11)
 (21, 'MacBook Air M3 13"', 27990000, 'macairm3.jpg', 'Chip M3, mỏng nhẹ, pin 18h.', 'CPU: M3\nRAM: 8GB\nSSD: 256GB', 25, 8, 0),
 (22, 'MacBook Pro 14" M3 Pro', 49990000, 'macpro14.jpg', 'Hiệu năng chuyên nghiệp.', 'CPU: M3 Pro\nRAM: 18GB\nSSD: 512GB', 10, 8, 0),
 (23, 'MacBook Air M1', 18490000, 'macairm1.jpg', 'Huyền thoại giá rẻ.', 'CPU: M1\nRAM: 8GB\nSSD: 256GB', 150, 8, 0),
@@ -163,8 +156,6 @@ INSERT INTO `sanpham` (`id`, `ten_sanpham`, `gia`, `hinhanh`, `mo_ta`, `thong_so
 (30, 'HP Envy x360', 22990000, 'hpenvyx360.jpg', 'Xoay gập 360 độ.', 'CPU: Core i7\nRAM: 16GB', 15, 11, 0),
 (31, 'MSI Gaming GF63', 14990000, 'msigf63.jpg', 'Gaming giá rẻ.', 'CPU: Core i5\nGPU: RTX 2050', 50, 10, 0),
 (32, 'Acer Nitro 5', 17990000, 'acernitro5.jpg', 'Quốc dân gaming.', 'CPU: Core i5\nGPU: RTX 3050', 45, 10, 0),
-
--- Phụ kiện (ID: 12, 13, 14)
 (33, 'AirPods Pro 2 USB-C', 5490000, 'airpodspro2.jpg', 'Chống ồn chủ động 2X.', 'Pin: 30h\nCổng: USB-C', 100, 12, 0),
 (34, 'Samsung Buds2 Pro', 2990000, 'buds2pro.jpg', 'Âm thanh Hi-Fi 24bit.', 'Pin: 18h\nChống nước: IPX7', 50, 12, 0),
 (35, 'Sony WH-1000XM5', 7490000, 'sonywh1000xm5.jpg', 'Chống ồn tốt nhất thế giới.', 'Pin: 30h\nChống ồn: Có', 20, 12, 0),
@@ -184,7 +175,7 @@ INSERT INTO `sanpham` (`id`, `ten_sanpham`, `gia`, `hinhanh`, `mo_ta`, `thong_so
 (49, 'Đế tản nhiệt Laptop', 450000, 'coolermaster.jpg', 'Mát mẻ.', 'Quạt: 160mm', 150, 14, 0),
 (50, 'Bộ vệ sinh Laptop', 50000, 'bovesinh.jpg', 'Giữ thiết bị luôn sạch sẽ.', 'Gồm: 7 món', 1000, 14, 0);
 
--- D. Đơn hàng mẫu (Để test Dashboard và Admin Panel)
+-- D. Đơn hàng mẫu
 INSERT INTO `donhang` (`id`, `id_nguoidung`, `tong_tien`, `trang_thai`, `ngay_tao`) VALUES
 (1, 2, 34990000, 'Đã giao', DATE_SUB(NOW(), INTERVAL 5 DAY)),
 (2, 2, 25990000, 'Đã giao', DATE_SUB(NOW(), INTERVAL 10 DAY)),

@@ -109,6 +109,39 @@ class AdminController extends Controller {
         $this->loadView('admin/orders', ['title' => 'Quản lý Đơn hàng', 'orders' => $orders], 'admin');
     }
 
+    /**
+     * Hiển thị chi tiết đơn hàng cho Admin
+     * URL: /admin/orderDetail/{id}
+     */
+    public function orderDetail($order_id = 0) {
+        $orderModel = $this->loadModel('Order');
+        $order_id = (int)$order_id;
+        if ($order_id <= 0) {
+            $this->redirect('admin/orders');
+            return;
+        }
+
+        $order = $orderModel->getOrderById($order_id); // admin: no user filter
+        if (!$order) {
+            $_SESSION['error'] = 'Không tìm thấy đơn hàng.';
+            $this->redirect('admin/orders');
+            return;
+        }
+
+        $details = $orderModel->getOrderDetails($order_id);
+
+        $data = [
+            'title' => 'Chi tiết đơn hàng #' . $order['id'],
+            'order' => $order,
+            'details' => $details,
+            // back_url để view biết quay về trang nào (admin sẽ về danh sách đơn hàng admin)
+            'back_url' => BASE_URL . '/admin/orders'
+        ];
+
+        // Reuse the existing order detail view but render inside admin layout
+        $this->loadView('order/detail', $data, 'admin');
+    }
+
     // Quản lý nhân sự
     public function users() {
         $userModel = $this->loadModel('User');
@@ -197,6 +230,42 @@ class AdminController extends Controller {
             'error' => $error
         ], 'admin');
     }
+    
+        // Admin: Reset password for a user by email
+        public function resetPassword() {
+            if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+                $this->redirect('admin/users');
+            }
+
+            $email = trim($_POST['email'] ?? '');
+            $newPassword = $_POST['new_password'] ?? '';
+
+            if (empty($email) || empty($newPassword)) {
+                $this->redirect('admin/users?error=' . rawurlencode('Email hoặc mật khẩu mới trống'));
+            }
+
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $this->redirect('admin/users?error=' . rawurlencode('Email không hợp lệ'));
+            }
+
+            if (strlen($newPassword) < 6) {
+                $this->redirect('admin/users?error=' . rawurlencode('Mật khẩu phải có ít nhất 6 ký tự'));
+            }
+
+            // Tải model User và cập nhật mật khẩu
+            $userModel = $this->loadModel('User');
+            $user = $userModel->findByEmail($email);
+            if (!$user) {
+                $this->redirect('admin/users?error=' . rawurlencode('Không tìm thấy người dùng với email này'));
+            }
+
+            $ok = $userModel->setPassword($user['id'], $newPassword);
+            if ($ok) {
+                $this->redirect('admin/users?success=' . rawurlencode('Đã đặt lại mật khẩu cho ' . $email));
+            } else {
+                $this->redirect('admin/users?error=' . rawurlencode('Cập nhật mật khẩu thất bại'));
+            }
+        }
 
     // Quản lý kho
     public function inventory() {
