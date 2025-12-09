@@ -1,6 +1,5 @@
 <?php
-// /views/product/add.php
-// (ĐÃ CẬP NHẬT: Upload ảnh từ máy tính)
+
 ?>
 <h2 class="mb-4">➕ Thêm sản phẩm mới</h2>
 

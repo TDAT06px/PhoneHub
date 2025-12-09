@@ -46,9 +46,6 @@
                 <?php if (!empty($_SESSION['user'])): ?>
                     <span class="text-muted small">Xin chào, <?= htmlspecialchars($_SESSION['user']['ho_ten'] ?? $_SESSION['user']['email'] ?? '') ?></span>
                     <a href="<?= BASE_URL ?>/auth/logout" class="btn btn-outline-secondary btn-sm">Đăng xuất</a>
-                <?php else: ?>
-                    <a href="<?= BASE_URL ?>/auth/login" class="btn btn-link btn-sm">Đăng nhập</a>
-                    <a href="<?= BASE_URL ?>/auth/register" class="btn btn-primary btn-sm">Đăng ký</a>
                 <?php endif; ?>
             </div>
         </div>

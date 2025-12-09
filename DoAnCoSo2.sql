@@ -9,8 +9,6 @@ USE `DoAnCoSo2`;
 -- 2. TẠO CẤU TRÚC BẢNG
 -- ========================================================
 
--- Bảng Người dùng (Đã cập nhật cho Admin Panel)
--- Thêm: role 'staff', cột 'trang_thai'
 CREATE TABLE `nguoidung` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `ho_ten` varchar(255) NOT NULL,
