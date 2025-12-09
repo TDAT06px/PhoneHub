@@ -60,7 +60,7 @@
                         </td>
                         
                         <td>
-                            <a href="<?= BASE_URL ?>/order/detail/<?= htmlspecialchars($o['id'] ?? '') ?>" class="btn btn-outline-info btn-sm" target="_blank">
+                            <a href="<?= BASE_URL ?>/admin/orderDetail/<?= htmlspecialchars($o['id'] ?? '') ?>" class="btn btn-outline-info btn-sm">
                                 <i class="fas fa-eye"></i> Chi tiết
                             </a>
                         </td>

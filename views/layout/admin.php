@@ -7,7 +7,7 @@
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
     <style>
@@ -39,7 +39,7 @@
         <ul class="components">
             <li><a href="<?= BASE_URL ?>/admin/dashboard" class="<?= (strpos($_SERVER['REQUEST_URI'], 'dashboard')!==false)?'active':'' ?>"><i class="fas fa-chart-pie me-2"></i> Tổng quan</a></li>
             <li><a href="<?= BASE_URL ?>/admin/orders" class="<?= (strpos($_SERVER['REQUEST_URI'], 'orders')!==false)?'active':'' ?>"><i class="fas fa-shopping-cart me-2"></i> Đơn hàng</a></li>
-            <li><a href="<?= BASE_URL ?>/product/list" target="_blank"><i class="fas fa-box me-2"></i> Xem trang Sản phẩm</a></li>
+            <!-- 'Xem trang Sản phẩm' removed as requested -->
             <li><a href="<?= BASE_URL ?>/admin/users" class="<?= (strpos($_SERVER['REQUEST_URI'], 'users')!==false)?'active':'' ?>"><i class="fas fa-users me-2"></i> Nhân sự</a></li>
             <li><a href="<?= BASE_URL ?>/admin/inventory" class="<?= (strpos($_SERVER['REQUEST_URI'], 'inventory')!==false)?'active':'' ?>"><i class="fas fa-warehouse me-2"></i> Kho hàng</a></li>
             <li><a href="<?= BASE_URL ?>/admin/revenue" class="<?= (strpos($_SERVER['REQUEST_URI'], 'revenue')!==false)?'active':'' ?>"><i class="fas fa-coins me-2"></i> Doanh thu</a></li>

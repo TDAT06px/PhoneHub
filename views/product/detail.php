@@ -3,6 +3,12 @@
 ?>
 
 <div class="row mb-5">
+    <?php if (!empty($_SESSION['user']['role']) && $_SESSION['user']['role'] === 'admin'): ?>
+    <div class="mb-3 w-100">
+        <a href="<?= BASE_URL ?>/admin/inventory" class="btn btn-outline-secondary btn-sm"><i class="fas fa-arrow-left me-1"></i> Quay lại quản trị</a>
+        <button class="btn btn-link btn-sm" onclick="history.back();"><i class="fas fa-arrow-left"></i> Quay lại</button>
+    </div>
+    <?php endif; ?>
     <div class="col-md-5 mb-4">
         <div class="card shadow-sm border-0">
             <img src="<?= BASE_URL ?>/assets/images/<?= htmlspecialchars($product['hinhanh']) ?>" 

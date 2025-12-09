@@ -17,7 +17,7 @@ CREATE TABLE `nguoidung` (
   `email` varchar(255) NOT NULL UNIQUE,
   `so_dien_thoai` varchar(15) NULL,
   `mat_khau` varchar(255) NOT NULL,
-  `role` enum('admin','staff','user') NOT NULL DEFAULT 'user', -- Đã thêm quyền staff
+  `role` enum('admin','user') NOT NULL DEFAULT 'user', 
   `trang_thai` tinyint(1) NOT NULL DEFAULT 1 COMMENT '1: Active, 0: Blocked', -- Đã thêm trạng thái
   `gioi_tinh` enum('Nam','Nữ','Khác') NULL DEFAULT 'Khác',
   `ngay_sinh` date NULL,

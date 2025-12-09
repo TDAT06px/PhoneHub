@@ -214,3 +214,7 @@
 </head>
 <body class="auth-page">
     <div class="auth-container">
+    </div>
+</body>
+</html>
+

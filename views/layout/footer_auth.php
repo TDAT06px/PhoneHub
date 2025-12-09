@@ -1,8 +1,12 @@
-</main>
-    
+        </div>
+    </main>
+
     <footer class="mt-auto py-3 bg-white border-top">
         <div class="container text-center">
-            <span class="text-muted small">&copy; <?= date('Y') ?> Admin Panel. V1.0</span>
+            <span class="small">&copy; <?= date('Y') ?> 
+                <strong class="text-primary">PHONE<span class="fw-light">HUB</span></strong>
+                — All rights reserved
+            </span>
         </div>
     </footer>
 
