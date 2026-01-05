@@ -1,12 +1,12 @@
 <?php
-
+// Ensure variables exist and are safe for output
+$keywordSafe = htmlspecialchars($keyword ?? '');
+$productCount = is_array($products) ? count($products) : 0;
 ?>
 
-<h2 class="mb-4">
-    Kết quả tìm kiếm cho: "<?= $keyword ?>"
-</h2>
+<h2 class="mb-4">Kết quả tìm kiếm cho: "<?= $keywordSafe ?>"</h2>
 
-<?php if (empty($products)): ?>
+<?php if ($productCount === 0): ?>
     
     <div class="alert alert-warning text-center" role="alert">
         <h4 class="alert-heading">Không tìm thấy!</h4>
@@ -18,7 +18,7 @@
 
 <?php else: ?>
 
-    <p class="text-muted mb-3">Tìm thấy <?= count($products) ?> sản phẩm.</p>
+    <p class="text-muted mb-3">Tìm thấy <?= $productCount ?> sản phẩm.</p>
     
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         <?php foreach ($products as $row): ?>

@@ -1,21 +1,12 @@
 <?php
 
 class PageController extends Controller {
-
-    /**
-     * Hiển thị trang Giới thiệu
-     * URL: /page/about
-     */
     public function about() {
         $this->loadView('page/about', [
             'title' => 'Về chúng tôi'
         ]);
     }
 
-    /**
-     * Hiển thị trang Liên hệ
-     * URL: /page/contact
-     */
     public function contact() {
         $success_message = '';
         $error_message = '';

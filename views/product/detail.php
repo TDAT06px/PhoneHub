@@ -1,6 +1,3 @@
-<?php
-?>
-
 <div class="row mb-5">
     <?php if (!empty($_SESSION['user']['role']) && $_SESSION['user']['role'] === 'admin'): ?>
     <div class="mb-3 w-100">

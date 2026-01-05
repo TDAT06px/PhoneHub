@@ -1,7 +1,5 @@
-<?php
-?>
 <style>
-.auth-container { max-width: 880px; width: 100%; }
+.auth-container { max-width: 600px; width: 40%; }
 .auth-card h2 { font-size: 2.2rem; }
 .auth-card .card-header h4 { font-size: 1.05rem; }
 .auth-card .btn-lg { padding: .85rem 1rem; font-size: 1.05rem; }

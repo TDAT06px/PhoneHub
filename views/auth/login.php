@@ -1,5 +1,3 @@
-<?php
-?>
 <div class="auth-card">
     <div class="card shadow-sm border-0 rounded-4 w-100">
         <div class="card-header d-flex align-items-center justify-content-between">

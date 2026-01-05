@@ -9,10 +9,6 @@ class OrderController extends Controller {
         $this->orderModel = $this->loadModel('Order');
     }
 
-    /**
-     * Hiển thị trang Lịch sử mua hàng
-     * URL: /order/history
-     */
     public function history() {
         $user_id = $_SESSION['user']['id'];
         
@@ -25,11 +21,6 @@ class OrderController extends Controller {
         
         $this->loadView('order/history', $data);
     }
-
-    /**
-     * Hiển thị chi tiết 1 đơn hàng
-     * URL: /order/detail/5 (ví dụ)
-     */
     public function detail($order_id = 0) {
         $order_id = (int)$order_id;
         $user_id = $_SESSION['user']['id'];

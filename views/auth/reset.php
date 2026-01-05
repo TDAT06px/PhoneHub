@@ -1,5 +1,3 @@
-<?php
-?>
 <div class="auth-card">
     <div class="card-header">
         <h2><strong>PHONE</strong><span>HUB</span></h2>

@@ -1,5 +1,3 @@
-<?php
-?>
 <h2 class="mb-4">📅 Lịch sử mua hàng</h2>
 
 <div class="card shadow border-0">

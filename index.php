@@ -78,4 +78,3 @@ if (!$found) {
         echo "<p>Đường dẫn không hợp lệ.</p>";
     }
 }
-?>

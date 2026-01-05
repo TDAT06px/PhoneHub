@@ -1,6 +1,3 @@
-<?php
-?>
-
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h2 class="mb-0">Chi tiết đơn hàng #<?= $order['id'] ?></h2>
     <a href="<?= BASE_URL ?>/order/history" class="btn btn-outline-secondary">

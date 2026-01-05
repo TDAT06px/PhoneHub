@@ -33,23 +33,23 @@ class User extends Database {
     }
 
     public function update($id, $data) {
-        $sql = "UPDATE nguoidung 
-                SET ho_ten = :ho_ten, 
-                    email = :email, 
-                    so_dien_thoai = :so_dien_thoai, 
-                    gioi_tinh = :gioi_tinh, 
-                    ngay_sinh = :ngay_sinh 
-                WHERE id = :id";
-        
-        $params = [
-            ':ho_ten'        => $data['ho_ten'],
-            ':email'         => $data['email'],
-            ':so_dien_thoai' => $data['so_dien_thoai'] ?? null,
-            ':gioi_tinh'     => $data['gioi_tinh'] ?? 'Khác',
-            ':ngay_sinh'     => $data['ngay_sinh'] ?? null,
-            ':id'            => $id
-        ];
-        
+        // Allow partial updates. Whitelist columns that may be updated.
+        $allowed = ['ho_ten','email','so_dien_thoai','gioi_tinh','ngay_sinh','mat_khau','role','trang_thai'];
+        $sets = [];
+        $params = [];
+
+        foreach ($allowed as $col) {
+            if (array_key_exists($col, $data)) {
+                $sets[] = "$col = :$col";
+                $params[":$col"] = $data[$col];
+            }
+        }
+
+        if (empty($sets)) return false;
+
+        $sql = "UPDATE nguoidung SET " . implode(', ', $sets) . " WHERE id = :id";
+        $params[':id'] = $id;
+
         return self::execute($sql, $params);
     }
 

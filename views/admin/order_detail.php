@@ -1,5 +1,3 @@
-<?php
-?>
 <div class="card shadow border-0">
     <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
         <h5 class="mb-0 fw-bold text-primary"><i class="fas fa-receipt me-2"></i> Chi tiết đơn hàng #<?= htmlspecialchars($order['id'] ?? '') ?></h5>

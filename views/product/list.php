@@ -19,48 +19,7 @@ if (isset($_GET['rating_min']) && isset($_GET['rating_max'])) {
 $is_admin = isset($_SESSION['user']['role']) && $_SESSION['user']['role'] === 'admin'; 
 ?>
 
-<style>
-    .carousel-item img {
-        height: 350px; 
-        object-fit: cover;
-        object-position: center; 
-    }
-    .text-shadow {
-        text-shadow: 0 2px 10px rgba(0,0,0,0.7);
-    }
-    .policy-icon {
-        width: 50px; height: 50px;
-        display: flex; align-items: center; justify-content: center;
-        border-radius: 50%;
-        background: rgba(var(--bs-primary-rgb), 0.1);
-        font-size: 1.5rem;
-    }
-    .rating-bar-5 { background: linear-gradient(90deg, #ffc107 100%, #ddd 0%); }
-    .rating-bar-4 { background: linear-gradient(90deg, #ffc107 80%, #ddd 20%); }
-    .rating-bar-3 { background: linear-gradient(90deg, #ffc107 60%, #ddd 40%); }
-    .product-card:hover { transform: translateY(-5px); transition: 0.3s; }
-    
-    .btn-parent-cat {
-        text-align: left;
-        border: none;
-        background: none;
-        width: 100%;
-        padding: 1rem;
-        font-weight: 500;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    .btn-parent-cat:hover {
-        background-color: #f8f9fa;
-        color: var(--bs-primary);
-    }
-    .btn-parent-cat[aria-expanded="true"] {
-        color: var(--bs-primary);
-        background-color: #e9ecef;
-        font-weight: bold;
-    }
-</style>
+<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/product-list.css">
 
 <div class="mb-5">
     <div class="row">
@@ -249,7 +208,7 @@ $is_admin = isset($_SESSION['user']['role']) && $_SESSION['user']['role'] === 'a
             <h5 class="mb-0 fw-bold"></h5>
             
             <div class="d-flex align-items-center gap-2">
-                <select class="form-select form-select-sm" style="width: 150px;" onchange="location = this.value;">
+                <select class="form-select form-select-sm select-sort" onchange="location = this.value;">
                     <option value="?<?= $base_query ?>sort=new" <?= (!isset($_GET['sort']) || $_GET['sort']=='new')?'selected':'' ?>>Mới nhất</option>
                     <option value="?<?= $base_query ?>sort=price_asc" <?= (isset($_GET['sort']) && $_GET['sort']=='price_asc')?'selected':'' ?>>Giá tăng dần</option>
                     <option value="?<?= $base_query ?>sort=price_desc" <?= (isset($_GET['sort']) && $_GET['sort']=='price_desc')?'selected':'' ?>>Giá giảm dần</option>
@@ -275,10 +234,10 @@ $is_admin = isset($_SESSION['user']['role']) && $_SESSION['user']['role'] === 'a
                 <div class="col">
                     <div class="card h-100 shadow-sm border-0 product-card position-relative">
                         
-                        <a href="<?= BASE_URL ?>/product/detail/<?= $row['id'] ?>">
-                            <img src="<?= BASE_URL ?>/assets/images/<?= htmlspecialchars($row['hinhanh']) ?>" 
-                                 class="card-img-top" style="height: 200px; object-fit: cover;" 
-                                 onerror="this.src='https://via.placeholder.com/300x300?text=No+Image'">
+                           <a href="<?= BASE_URL ?>/product/detail/<?= $row['id'] ?>">
+                           <img src="<?= BASE_URL ?>/assets/images/<?= htmlspecialchars($row['hinhanh']) ?>" 
+                               class="card-img-top card-img-fixed" 
+                               onerror="this.src='https://via.placeholder.com/300x300?text=No+Image'">
                         </a>
                         
                         <?php if ($is_admin): ?>

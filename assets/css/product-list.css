@@ -1,0 +1,38 @@
+/* Product list page styles */
+.carousel-item img {
+    height: 350px;
+    object-fit: cover;
+    object-position: center;
+}
+.text-shadow {
+    text-shadow: 0 2px 10px rgba(0,0,0,0.7);
+}
+.policy-icon {
+    width: 50px; height: 50px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    background: rgba(var(--bs-primary-rgb), 0.1);
+    font-size: 1.5rem;
+}
+.rating-bar-5 { background: linear-gradient(90deg, #ffc107 100%, #ddd 0%); }
+.rating-bar-4 { background: linear-gradient(90deg, #ffc107 80%, #ddd 20%); }
+.rating-bar-3 { background: linear-gradient(90deg, #ffc107 60%, #ddd 40%); }
+.product-card:hover { transform: translateY(-5px); transition: 0.3s; }
+
+.btn-parent-cat {
+    text-align: left;
+    border: none;
+    background: none;
+    width: 100%;
+    padding: 1rem;
+    font-weight: 500;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.btn-parent-cat:hover { background-color: #f8f9fa; color: var(--bs-primary); }
+.btn-parent-cat[aria-expanded="true"] { color: var(--bs-primary); background-color: #e9ecef; font-weight: bold; }
+
+/* utility classes for this view */
+.card-img-fixed { height: 200px; object-fit: cover; }
+.select-sort { width: 150px; }

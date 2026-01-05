@@ -1,5 +1,3 @@
-<?php
-?>
 <h2 class="mb-4 text-center">🛒 Giỏ hàng của bạn</h2>
 
 <form action="<?= BASE_URL ?>/cart/update" method="POST">

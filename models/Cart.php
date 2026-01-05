@@ -12,11 +12,6 @@ class Cart {
         }
     }
 
-    /**
-     * Thêm sản phẩm vào giỏ
-     * @param int $id ID sản phẩm
-     * @param int $qty Số lượng
-     */
     public function add($id, $qty = 1) {
         $id = (int)$id;
         $qty = (int)$qty;
@@ -28,11 +23,6 @@ class Cart {
         }
     }
 
-    /**
-     * Cập nhật số lượng sản phẩm
-     * @param int $id ID sản phẩm
-     * @param int $qty Số lượng mới (nếu = 0 thì xóa)
-     */
     public function update($id, $qty) {
         $id = (int)$id;
         $qty = (int)$qty;
@@ -44,10 +34,6 @@ class Cart {
         }
     }
 
-    /**
-     * Xóa 1 sản phẩm khỏi giỏ
-     * @param int $id ID sản phẩm
-     */
     public function remove($id) {
         $id = (int)$id;
         if (isset($_SESSION['cart'][$id])) {
@@ -55,25 +41,14 @@ class Cart {
         }
     }
 
-    /**
-     * Xóa toàn bộ giỏ hàng
-     */
     public function clear() {
         $_SESSION['cart'] = [];
     }
 
-    /**
-     * Lấy toàn bộ sản phẩm trong giỏ (chỉ ID và số lượng)
-     * @return array Ví dụ: [ '5' => 2, '1' => 1 ]
-     */
     public function getContents() {
         return $_SESSION['cart'];
     }
 
-    /**
-     * Đếm tổng số lượng SẢN PHẨM (không phải số loại)
-     * @return int
-     */
     public function getTotalItems() {
         return array_sum($_SESSION['cart']);
     }

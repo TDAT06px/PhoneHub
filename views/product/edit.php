@@ -1,5 +1,3 @@
-<?php
-?>
 <h2 class="mb-4">✏️ Sửa sản phẩm: <?= htmlspecialchars($product['ten_sanpham']) ?></h2>
 
 <div class="card shadow-sm border-0">

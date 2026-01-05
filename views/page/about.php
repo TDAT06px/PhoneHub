@@ -1,27 +1,4 @@
-<?php
-?>
-
-<style>
-    .carousel-item img {
-        height: 400px; 
-        object-fit: cover;
-        object-position: center; 
-    }
-    .text-shadow {
-        text-shadow: 0 2px 10px rgba(0,0,0,0.7);
-    }
-    .policy-icon {
-        width: 60px; height: 60px;
-        display: flex; align-items: center; justify-content: center;
-        border-radius: 50%;
-        background: rgba(var(--bs-primary-rgb), 0.1);
-        font-size: 1.8rem;
-    }
-    .about-content {
-        line-height: 1.8;
-        color: #555;
-    }
-</style>
+<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/about.css">
 
 <div class="mb-5">
     <div id="aboutCarousel" class="carousel slide shadow rounded-4 overflow-hidden" data-bs-ride="carousel">

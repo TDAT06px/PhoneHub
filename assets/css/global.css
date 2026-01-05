@@ -1,23 +1,28 @@
+
 :root {
-   
-    --primary-color: #007bff; 
-    --secondary-color: #6c757d; 
-    --accent-color: #dc3545; 
-    --bg-light: #f8f9fa; 
-    --border-color: #e9ecef; 
-    --card-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05); 
+    --primary-color: #E91E63;
+    --secondary-color: #6c757d;
+    --accent-color: #dc3545;
+    --bg-light: #f8f9fa;
+    --border-color: #e9ecef;
+    --card-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
 }
+
 
 body {
     background-color: var(--bg-light);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: #343a40;
+    line-height: 1.6;
 }
+
 
 .navbar-brand {
     font-weight: 700;
     font-size: 1.5rem;
-    color: #fff !important; 
+    color: var(--primary-color) !important;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .form-control:focus {

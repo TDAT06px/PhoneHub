@@ -1,6 +1,3 @@
-<?php
-
-?>
 <h2 class="mb-4">➕ Thêm sản phẩm mới</h2>
 
 <div class="card shadow-sm border-0">
