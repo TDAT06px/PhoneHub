@@ -1,7 +1,5 @@
 <?php
-// views/product/list.php
 
-// 1. Xử lý logic lọc & phân trang
 $current_params = $_GET;
 unset($current_params['page']);
 $base_query = http_build_query($current_params);
@@ -10,7 +8,6 @@ if (!empty($base_query)) $base_query .= '&';
 $category_id = isset($_GET['category']) ? (int)$_GET['category'] : null;
 $min_price = $_GET['min_price'] ?? '';
 $max_price = $_GET['max_price'] ?? '';
-// Xử lý rating theo khoảng
 $rating = null;
 if (isset($_GET['rating_min']) && isset($_GET['rating_max'])) {
     $rating = [
@@ -19,7 +16,6 @@ if (isset($_GET['rating_min']) && isset($_GET['rating_max'])) {
     ];
 }
 
-// 2. Kiểm tra quyền Admin
 $is_admin = isset($_SESSION['user']['role']) && $_SESSION['user']['role'] === 'admin'; 
 ?>
 
@@ -44,7 +40,6 @@ $is_admin = isset($_SESSION['user']['role']) && $_SESSION['user']['role'] === 'a
     .rating-bar-3 { background: linear-gradient(90deg, #ffc107 60%, #ddd 40%); }
     .product-card:hover { transform: translateY(-5px); transition: 0.3s; }
     
-    /* Style riêng cho nút danh mục cha để trông giống link nhưng không phải link */
     .btn-parent-cat {
         text-align: left;
         border: none;
@@ -149,17 +144,14 @@ $is_admin = isset($_SESSION['user']['role']) && $_SESSION['user']['role'] === 'a
                 <?php 
                 if (isset($categories) && is_array($categories)) {
                     foreach ($categories as $parent) {
-                        // Chỉ lấy danh mục Cha (parent_id = null)
                         if (empty($parent['parent_id'])) {
                             
-                            // Tìm con của cha này
                             $children = [];
                             $is_expanded = false; // Trạng thái mở của menu cha
 
                             foreach ($categories as $child) {
                                 if ($child['parent_id'] == $parent['id']) {
                                     $children[] = $child;
-                                    // Nếu đang chọn con thì cha phải mở ra
                                     if ($category_id == $child['id']) $is_expanded = true;
                                 }
                             }
@@ -217,7 +209,6 @@ $is_admin = isset($_SESSION['user']['role']) && $_SESSION['user']['role'] === 'a
             <div class="card-header bg-light"><h6 class="mb-0 fw-bold">Đánh giá</h6></div>
             <div class="list-group list-group-flush">
                 <?php 
-                // Định nghĩa các khoảng sao: [min, max, label, stars]
                 $rating_ranges = [
                     ['min' => 5.0, 'max' => 5.0, 'label' => '5 sao', 'stars' => 5],
                     ['min' => 4.0, 'max' => 4.9, 'label' => '4 - 4.9 sao', 'stars' => 4],

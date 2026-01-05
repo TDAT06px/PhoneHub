@@ -1,5 +1,4 @@
 <?php
-// views/auth/profile.php
 ?>
 
 <div class="row justify-content-center">

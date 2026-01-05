@@ -1,9 +1,7 @@
 <?php
-// /models/PasswordReset.php
 
 class PasswordReset extends Database {
 
-    // Tạo bảng nếu chưa tồn tại (để tiện cho môi trường dev)
     private static function ensureTable() {
         $sql = "CREATE TABLE IF NOT EXISTS password_resets (
             id INT AUTO_INCREMENT PRIMARY KEY,
@@ -17,7 +15,6 @@ class PasswordReset extends Database {
         try {
             self::execute($sql, []);
         } catch (Exception $e) {
-            // ignore errors for environments where privileges are limited
         }
     }
 

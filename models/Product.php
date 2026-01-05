@@ -1,13 +1,8 @@
 <?php
-// /models/Product.php
 
 class Product extends Database {
 
-    /**
-     * Lấy danh sách sản phẩm (Có phân trang & Lọc & Sắp xếp & Đếm comment)
-     */
     public function getAll($limit, $offset, $filters = []) {
-        // Subquery lấy số lượng comment
         $sql = "SELECT s.*, 
                        (SELECT COUNT(*) FROM binhluan WHERE id_sanpham = s.id) as review_count
                 FROM sanpham s";
@@ -15,13 +10,10 @@ class Product extends Database {
         $where_clauses = ["1=1"]; 
         $params = [];
 
-        // 1. CÁC BỘ LỌC (WHERE)
-        // Lọc theo danh mục
         if (!empty($filters['category_id'])) {
             $where_clauses[] = "id_danhmuc = :category_id";
             $params[':category_id'] = (int)$filters['category_id'];
         }
-        // Lọc theo giá
         if (!empty($filters['min_price'])) {
             $where_clauses[] = "gia >= :min_price";
             $params[':min_price'] = (float)$filters['min_price'];
@@ -30,18 +22,15 @@ class Product extends Database {
             $where_clauses[] = "gia <= :max_price";
             $params[':max_price'] = (float)$filters['max_price'];
         }
-        // Lọc theo đánh giá (sao) - theo khoảng
         if (!empty($filters['rating']) && is_array($filters['rating'])) {
             $where_clauses[] = "avg_rating >= :rating_min AND avg_rating <= :rating_max";
             $params[':rating_min'] = (float)$filters['rating']['min'];
             $params[':rating_max'] = (float)$filters['rating']['max'];
         } elseif (!empty($filters['rating'])) {
-            // Fallback cho trường hợp rating là số đơn giản (backward compatibility)
             $where_clauses[] = "avg_rating >= :rating";
             $params[':rating'] = (float)$filters['rating'];
         }
         
-        // Lọc theo từ khóa tìm kiếm
         if (!empty($filters['keyword'])) {
             $where_clauses[] = "ten_sanpham LIKE :keyword";
             $params[':keyword'] = '%' . $filters['keyword'] . '%';
@@ -49,8 +38,7 @@ class Product extends Database {
 
         $sql .= " WHERE " . implode(" AND ", $where_clauses);
 
-        // 2. SẮP XẾP (ORDER BY) - [PHẦN MỚI THÊM]
-        $sort = $filters['sort'] ?? 'new'; // Mặc định là mới nhất
+        $sort = $filters['sort'] ?? 'new'; 
         switch ($sort) {
             case 'price_asc':
                 $sql .= " ORDER BY gia ASC";
@@ -67,12 +55,11 @@ class Product extends Database {
             case 'view':
                 $sql .= " ORDER BY luot_xem DESC";
                 break;
-            default: // 'new'
+            default: 
                 $sql .= " ORDER BY id DESC";
                 break;
         }
 
-        // 3. PHÂN TRANG (LIMIT)
         $sql .= " LIMIT :limit OFFSET :offset";
         
         $params[':limit'] = (int)$limit;
@@ -81,9 +68,6 @@ class Product extends Database {
         return self::query($sql, $params, true);
     }
 
-    /**
-     * Đếm tổng số sản phẩm (Dùng cho phân trang)
-     */
     public function countAll($filters = []) {
         $sql = "SELECT COUNT(*) as total FROM sanpham";
         $where_clauses = ["1=1"]; 
@@ -115,13 +99,11 @@ class Product extends Database {
         return $result['total'];
     }
 
-    // Lấy chi tiết 1 sản phẩm
     public function getById($id) {
         $sql = "SELECT * FROM sanpham WHERE id = :id";
         return self::query($sql, [':id' => $id], false);
     }
 
-    // Lấy nhiều sản phẩm theo danh sách ID (Dùng cho giỏ hàng)
     public function getByIds($ids) {
         if (empty($ids)) return [];
         $placeholders = implode(',', array_fill(0, count($ids), '?'));
@@ -129,7 +111,6 @@ class Product extends Database {
         return self::query($sql, array_values($ids), true);
     }
 
-    // Thêm sản phẩm
     public function create($data) {
         $sql = "INSERT INTO sanpham (ten_sanpham, gia, hinhanh, id_danhmuc, mo_ta, thong_so_ky_thuat, so_luong_ton) 
                 VALUES (:ten_sanpham, :gia, :hinhanh, :id_danhmuc, :mo_ta, :thong_so_ky_thuat, :so_luong_ton)";
@@ -146,7 +127,6 @@ class Product extends Database {
         return self::execute($sql, $params);
     }
 
-    // Cập nhật sản phẩm
     public function update($id, $data) {
         $sql = "UPDATE sanpham SET 
                     ten_sanpham = :ten_sanpham, 
@@ -171,7 +151,6 @@ class Product extends Database {
         return self::execute($sql, $params);
     }
     
-    // Xóa sản phẩm
     public function delete($id) {
         $sql = "DELETE FROM sanpham WHERE id = :id";
         return self::execute($sql, [':id' => (int)$id]);
@@ -183,7 +162,6 @@ class Product extends Database {
         return self::query($sql, [':keyword' => $search_term]);
     }
    
-    // Sản phẩm liên quan
     public function getRelated($category_id, $exclude_id, $limit = 4) {
         $sql = "SELECT * FROM sanpham 
                 WHERE id_danhmuc = :cat_id AND id != :ex_id 

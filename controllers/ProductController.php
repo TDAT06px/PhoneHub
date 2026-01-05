@@ -1,5 +1,4 @@
 <?php
-// controllers/ProductController.php
 
 class ProductController extends Controller {
 
@@ -9,14 +8,12 @@ class ProductController extends Controller {
         $this->productModel = $this->loadModel('Product');
     }
 
-    // Xem danh sách sản phẩm
     public function list() {
         $filters = [];
         if (!empty($_GET['category'])) { $filters['category_id'] = (int)$_GET['category']; }
         if (!empty($_GET['min_price'])) { $filters['min_price'] = (float)$_GET['min_price']; }
         if (!empty($_GET['max_price'])) { $filters['max_price'] = (float)$_GET['max_price']; }
         if (!empty($_GET['keyword'])) { $filters['keyword'] = trim($_GET['keyword']); }
-        // Xử lý rating theo khoảng
         if (!empty($_GET['rating_min']) && !empty($_GET['rating_max'])) {
             $filters['rating'] = [
                 'min' => (float)$_GET['rating_min'],
@@ -45,7 +42,6 @@ class ProductController extends Controller {
         ]);
     }
 
-    // --- [HÀM CẦN SỬA LÀ HÀM NÀY] ---
     public function detail($id = 0) {
         $id = (int)$id;
         $product = $this->productModel->getById($id);
@@ -57,12 +53,9 @@ class ProductController extends Controller {
         $categoryModel = $this->loadModel('Category');
         $relatedProducts = $this->productModel->getRelated($product['id_danhmuc'], $id);
         
-        // Lấy danh sách bình luận
         $commentModel = $this->loadModel('Comment');
         $comments = $commentModel->getByProductId($id);
 
-        // --- [ĐOẠN CODE MỚI THÊM ĐỂ SỬA LỖI] ---
-        // Tính toán thống kê sao (5 sao, 4 sao...)
         $total_comments = count($comments);
         $rating_counts = [
             5 => 0,
@@ -78,7 +71,6 @@ class ProductController extends Controller {
                 $rating_counts[$star]++;
             }
         }
-        // --- [KẾT THÚC ĐOẠN MỚI] ---
 
         $this->loadView('product/detail', [
             'title' => $product['ten_sanpham'],
@@ -86,13 +78,11 @@ class ProductController extends Controller {
             'related_products' => $relatedProducts,
             'comments' => $comments,
             
-            // Truyền thêm 2 biến này sang View để hết lỗi
             'total_comments' => $total_comments, 
             'rating_counts' => $rating_counts    
         ]);
     }
 
-    // --- CÁC HÀM ADMIN GIỮ NGUYÊN ---
 
     public function add() {
         $this->checkAdmin(); 

@@ -1,6 +1,4 @@
 <?php
-// /views/product/edit.php
-// (ĐÃ CẬP NHẬT: Upload ảnh + Xem trước ảnh cũ)
 ?>
 <h2 class="mb-4">✏️ Sửa sản phẩm: <?= htmlspecialchars($product['ten_sanpham']) ?></h2>
 

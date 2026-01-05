@@ -1,13 +1,9 @@
-/* assets/css/auth.css - Supplementary styling for authentication pages */
-
-/* Input Field Focus States */
 .auth-card .form-control:focus,
 .auth-card .form-select:focus {
     border-color: #E91E63 !important;
     box-shadow: 0 0 0 3px rgba(233, 30, 99, 0.1) !important;
 }
 
-/* Validation States */
 .auth-card .form-control.is-invalid {
     border-color: #dc3545;
 }
@@ -26,7 +22,6 @@
     box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
 }
 
-/* Custom Scrollbar */
 .auth-card .form-control::-webkit-scrollbar {
     width: 8px;
 }
@@ -44,15 +39,12 @@
 .auth-card .form-control::-webkit-scrollbar-thumb:hover {
     background: #FF4081;
 }
-
-/* Smooth Transitions */
 .auth-card .form-control,
 .auth-card .form-select,
 .btn-auth {
     transition: all 0.3s ease;
 }
 
-/* Link Styling in Auth Card */
 .auth-footer a {
     color: #E91E63;
     font-weight: 600;
@@ -62,19 +54,15 @@
     color: #FF4081;
 }
 
-/* Form Label Color */
 .auth-card .form-label {
     color: #333;
     font-weight: 600;
 }
 
-/* Badge/Icon Styling */
 .auth-card .icon-label {
     color: #E91E63;
     margin-right: 8px;
 }
-
-/* Responsive Adjustments */
 @media (max-width: 768px) {
     .auth-card .card-header h2 {
         font-size: 1.8rem;
@@ -85,12 +73,10 @@
     }
 }
 
-/* Button Hover Effects */
 .btn-auth:active {
     transform: translateY(2px);
 }
 
-/* Alert Customization */
 .auth-card .alert {
     border-left: 4px solid;
 }

@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/auth.css">
 
     <style>
-        /* Auth header styles */
         .auth-hero {
             background: linear-gradient(135deg, var(--ah-gradient-1), var(--ah-gradient-2));
             border-bottom: 1px solid rgba(0,0,0,0.04);
@@ -53,4 +52,3 @@
 
     <main class="container py-5 flex-grow-1 d-flex align-items-center justify-content-center">
         <div class="auth-container">
-<!-- auth view will be included here -->

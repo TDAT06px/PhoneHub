@@ -1,6 +1,5 @@
 <?php
-// /views/product/search_results.php
-// Các biến $title, $products, $keyword được truyền từ Controller
+
 ?>
 
 <h2 class="mb-4">

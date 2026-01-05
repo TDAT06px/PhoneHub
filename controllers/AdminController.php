@@ -1,18 +1,14 @@
 <?php
-// controllers/AdminController.php
 
 class AdminController extends Controller {
 
     public function __construct() {
-        // Bắt buộc phải là Admin mới được vào các trang này
         $this->checkAdmin();
     }
 
-    // Trang tổng quan
     public function dashboard() {
         $db = new Database(); 
         
-        // Thống kê số liệu
         $stats = [
             'products' => $db->query("SELECT COUNT(*) as c FROM sanpham", [], false)['c'],
             'orders'   => $db->query("SELECT COUNT(*) as c FROM donhang", [], false)['c'],
@@ -20,8 +16,6 @@ class AdminController extends Controller {
             'users'    => $db->query("SELECT COUNT(*) as c FROM nguoidung WHERE role='user'", [], false)['c']
         ];
 
-        // Biểu đồ doanh thu (đơn giản hóa)
-        // Biểu đồ doanh thu: tổng doanh thu của 6 tháng gần nhất (theo tháng)
         $months_to_show = 6;
         $start_date = date('Y-m-01', strtotime("-" . ($months_to_show - 1) . " months"));
 
@@ -48,7 +42,6 @@ class AdminController extends Controller {
             $chart_values[] = isset($map[$ym]) ? (float)$map[$ym] : 0;
         }
 
-        // Lấy đơn hàng mới nhất để hiển thị ở bên dưới
         $recent_orders = $db->query("SELECT * FROM donhang ORDER BY ngay_tao DESC LIMIT 6");
 
         $this->loadView('admin/dashboard', [
@@ -60,11 +53,9 @@ class AdminController extends Controller {
         ], 'admin');
     }
 
-    // Quản lý đơn hàng (MỚI)
     public function orders() {
         $orderModel = $this->loadModel('Order');
 
-        // Xử lý cập nhật trạng thái
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['order_id'])) {
             $order_id = (int)$_POST['order_id'];
             $status = $_POST['trang_thai'];
@@ -77,15 +68,11 @@ class AdminController extends Controller {
         $this->loadView('admin/orders', ['title' => 'Quản lý Đơn hàng', 'orders' => $orders], 'admin');
     }
 
-    /**
-     * Hiển thị chi tiết đơn hàng cho Admin
-     * URL: /admin/orderDetail/{id}
-     */
     public function orderDetail($order_id = 0) {
         $order_id = (int)$order_id;
         $orderModel = $this->loadModel('Order');
 
-        $order = $orderModel->getOrderById($order_id); // Không truyền user_id -> admin xem được
+        $order = $orderModel->getOrderById($order_id);
         if (!$order) {
             $_SESSION['error'] = 'Không tìm thấy đơn hàng.';
             $this->redirect('admin/orders');
@@ -101,29 +88,23 @@ class AdminController extends Controller {
         ], 'admin');
     }
 
-    // Quản lý nhân sự
     public function users() {
         $userModel = $this->loadModel('User');
 
-        // Xử lý POST từ form trên trang Quản lý Nhân sự
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Loại hành động: create_user | change_password | update_status
             $action = $_POST['action'] ?? '';
 
             if ($action === 'create_user') {
-                // Tạo người dùng mới (role bắt buộc là 'user' theo yêu cầu)
                 $ho_ten = trim($_POST['ho_ten'] ?? '');
                 $email = trim($_POST['email'] ?? '');
                 $so_dien_thoai = trim($_POST['so_dien_thoai'] ?? '');
                 $mat_khau = $_POST['mat_khau'] ?? '';
 
-                // Basic validation
                 if (empty($ho_ten) || empty($email) || empty($mat_khau) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
                     $_SESSION['error'] = 'Vui lòng điền đầy đủ thông tin hợp lệ để tạo tài khoản.';
                     $this->redirect('admin/users');
                 }
 
-                // Kiểm tra email đã tồn tại
                 if ($userModel->findByEmail($email)) {
                     $_SESSION['error'] = 'Email đã tồn tại.';
                     $this->redirect('admin/users');
@@ -168,12 +149,9 @@ class AdminController extends Controller {
             if ($action === 'update_status') {
                 $user_id = (int)($_POST['user_id'] ?? 0);
                 $status = $_POST['trang_thai'] ?? '0';
-                $role = $_POST['role'] ?? null; // We will not allow role escalation from this page (optional)
-
-                // Normalize status
+                $role = $_POST['role'] ?? null; 
                 $status_val = ($status === '1' || $status === 'active' || $status === 'Đã kích hoạt') ? 1 : 0;
 
-                // Use model helper if exists
                 if (method_exists($userModel, 'updateRoleAndStatus') && $role !== null) {
                     $userModel->updateRoleAndStatus($user_id, $role, $status_val);
                 } else {
@@ -191,14 +169,11 @@ class AdminController extends Controller {
         $this->loadView('admin/users', ['title' => 'Quản lý Nhân sự', 'users' => $users], 'admin');
     }
 
-    // Quản lý kho
     public function inventory() {
         $db = new Database();
         $products = $db->query("SELECT * FROM sanpham ORDER BY so_luong_ton ASC");
         $this->loadView('admin/inventory', ['title' => 'Quản lý Kho', 'products' => $products], 'admin');
     }
-
-    // Báo cáo doanh thu
     public function revenue() {
         $db = new Database();
         $stats = $db->query("

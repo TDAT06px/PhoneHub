@@ -1,6 +1,4 @@
 <?php
-// Minimal login card only — header_auth opens the surrounding <main>
-// Variables: $title, $error
 ?>
 <div class="auth-card">
     <div class="card shadow-sm border-0 rounded-4 w-100">

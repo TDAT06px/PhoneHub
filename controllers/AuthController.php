@@ -7,10 +7,8 @@ class AuthController extends Controller {
     }
 
     public function login() {
-        // Nếu đã đăng nhập, kiểm tra role và redirect đúng
         if (isset($_SESSION['user'])) {
             $userRole = trim($_SESSION['user']['role'] ?? '');
-            // CHỈ admin mới vào admin dashboard (không phải user hay staff)
             if ($userRole === 'admin') {
                 header("Location: " . BASE_URL . "/admin/dashboard");
             } else {
@@ -27,24 +25,19 @@ class AuthController extends Controller {
             $user = $this->userModel->login($email, $password);
 
             if ($user) {
-                // KIỂM TRA TRẠNG THÁI TÀI KHOẢN
                 if ($user['trang_thai'] == 0) {
                     $error_message = 'Tài khoản của bạn đang chờ duyệt hoặc bị khóa!';
                 } else {
-                    // Đăng nhập thành công - Lưu đầy đủ thông tin vào session
                     $userRole = trim($user['role'] ?? '');
                     $_SESSION['user'] = [
                         'id' => (int)$user['id'],
                         'ho_ten' => $user['ho_ten'],
                         'email' => $user['email'],
-                        'role' => $userRole // Đảm bảo role được lưu đúng và trim
+                        'role' => $userRole 
                     ];
-                    
-                    // Phân hướng theo role: CHỈ admin mới vào admin dashboard
                     if ($userRole === 'admin') {
                         header("Location: " . BASE_URL . "/admin/dashboard");
                     } else {
-                        // User và staff không được vào admin - chuyển về trang chủ
                         header("Location: " . BASE_URL);
                     }
                     exit;
@@ -63,7 +56,6 @@ class AuthController extends Controller {
     }
 
     public function profile() {
-        // Kiểm tra đăng nhập
         if (!isset($_SESSION['user'])) {
             header("Location: " . BASE_URL . "/auth/login");
             exit;
@@ -82,7 +74,6 @@ class AuthController extends Controller {
             $ngay_sinh = $_POST['ngay_sinh'] ?? null;
             $gioi_tinh = $_POST['gioi_tinh'] ?? 'Khác';
 
-            // Validation
             if (empty($ho_ten)) {
                 $error_message = 'Vui lòng nhập họ và tên!';
             } elseif (empty($email)) {
@@ -90,7 +81,6 @@ class AuthController extends Controller {
             } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $error_message = 'Email không hợp lệ!';
             } else {
-                // Nếu email thay đổi, kiểm tra email mới chưa tồn tại
                 if ($email !== $user['email']) {
                     $existing = $this->userModel->findByEmail($email);
                     if ($existing) {
@@ -99,7 +89,6 @@ class AuthController extends Controller {
                 }
 
                 if (empty($error_message)) {
-                    // Cập nhật thông tin
                     $data = [
                         'ho_ten' => $ho_ten,
                         'email' => $email,
@@ -110,10 +99,8 @@ class AuthController extends Controller {
 
                     if ($this->userModel->update($user_id, $data)) {
                         $success_message = 'Cập nhật hồ sơ thành công!';
-                        // Cập nhật session
                         $_SESSION['user']['ho_ten'] = $ho_ten;
                         $_SESSION['user']['email'] = $email;
-                        // Reload user data
                         $user = $this->userModel->getById($user_id);
                     } else {
                         $error_message = 'Cập nhật thất bại! Vui lòng thử lại sau.';
@@ -131,7 +118,6 @@ class AuthController extends Controller {
     }
     
     public function register() {
-        // Nếu đã đăng nhập thì chuyển về trang chủ
         if (isset($_SESSION['user'])) { 
             header("Location: " . BASE_URL); 
             exit; 
@@ -141,7 +127,6 @@ class AuthController extends Controller {
         $success_message = '';
         
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            // Lấy dữ liệu từ form
             $ho_ten = trim($_POST['ho_ten'] ?? '');
             $email = trim($_POST['email'] ?? '');
             $so_dien_thoai = trim($_POST['so_dien_thoai'] ?? '');
@@ -150,7 +135,6 @@ class AuthController extends Controller {
             $gioi_tinh = $_POST['gioi_tinh'] ?? 'Khác';
             $ngay_sinh = $_POST['ngay_sinh'] ?? null;
             
-            // Validation
             if (empty($ho_ten)) {
                 $error_message = 'Vui lòng nhập họ và tên!';
             } elseif (empty($email)) {
@@ -164,12 +148,10 @@ class AuthController extends Controller {
             } elseif ($mat_khau !== $mat_khau_confirm) {
                 $error_message = 'Mật khẩu xác nhận không khớp!';
             } else {
-                // Kiểm tra email đã tồn tại chưa
                 $existing_user = $this->userModel->findByEmail($email);
                 if ($existing_user) {
                     $error_message = 'Email này đã được sử dụng! Vui lòng chọn email khác.';
                 } else {
-                    // Tạo tài khoản mới
                     $data = [
                         'ho_ten' => $ho_ten,
                         'email' => $email,
@@ -184,7 +166,6 @@ class AuthController extends Controller {
                     
                     if ($result) {
                         $success_message = 'Đăng ký thành công! Tài khoản của bạn đang chờ duyệt. Vui lòng đăng nhập sau khi được duyệt.';
-                        // Xóa dữ liệu form sau khi đăng ký thành công
                         $_POST = [];
                     } else {
                         $error_message = 'Đăng ký thất bại! Vui lòng thử lại sau.';

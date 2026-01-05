@@ -1,14 +1,10 @@
-/* ======================================= */
-/* 3. TRANG DANH SÁCH SẢN PHẨM (LIST.PHP) */
-/* ======================================= */
 
-/* --- Product Card Styling --- */
 .product-card {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    height: 100%; /* Đảm bảo chiều cao bằng nhau */
+    height: 100%;
 }
 
 .product-card:hover {
@@ -17,7 +13,7 @@
 }
 
 .product-card .card-img-top {
-    height: 200px; /* Chiều cao cố định cho ảnh */
+    height: 200px;
     object-fit: cover;
     border-bottom: 1px solid var(--border-color);
 }
@@ -31,7 +27,7 @@
 .product-card .product-title {
     font-size: 1.1rem;
     font-weight: 600;
-    height: 3rem; /* Cố định chiều cao tiêu đề 2 dòng */
+    height: 3rem;
     overflow: hidden;
     margin-bottom: 0.5rem;
 }
@@ -50,7 +46,6 @@
     margin-bottom: 0.5rem;
 }
 
-/* --- Sidebar Filtering (Lọc) --- */
 .sidebar-card .card-header {
     background-color: var(--primary-color) !important;
     color: white;
@@ -70,21 +65,15 @@
 }
 
 
-/* ======================================= */
-/* 4. TRANG CHI TIẾT SẢN PHẨM (DETAIL.PHP) */
-/* ======================================= */
-
-/* --- Image & Info Section --- */
 .detail-image-box img {
     border-radius: 12px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
 #avg-rating-display .fs-5 {
-    color: #ffc107; /* Màu vàng sao */
+    color: #ffc107;
 }
 
-/* --- Tabs Styling --- */
 .nav-tabs .nav-link {
     color: var(--secondary-color);
     border: none;
@@ -100,12 +89,9 @@
     font-weight: 700;
 }
 
-/* --- Thông số kỹ thuật (Pre-line format) --- */
 #specs-tab-pane {
     line-height: 1.8;
 }
-
-/* Highlight các dòng thông số */
 #specs-tab-pane > div:before {
     content: "• ";
     color: var(--primary-color);
@@ -113,17 +99,14 @@
 }
 
 
-/* --- Bình Luận (Comment Section) --- */
 .comment-list .list-group-item {
     border-left: 5px solid var(--border-color);
     border-radius: 8px;
     margin-bottom: 1rem !important;
     transition: all 0.2s;
 }
-
-/* Highlight bình luận mới (từ AJAX) */
 .comment-list .list-group-item[style*="background-color"] {
-    border-left-color: #28a745; /* Màu xanh lá cây */
+    border-left-color: #28a745; 
     animation: fade-in-border 2s ease-out;
 }
 

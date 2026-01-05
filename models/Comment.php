@@ -1,11 +1,7 @@
 <?php
-// /models/Comment.php
 
 class Comment extends Database {
 
-    /**
-     * Lấy tất cả bình luận cho một sản phẩm (kèm tên người dùng)
-     */
     public function getByProductId($product_id) {
         $sql = "SELECT bl.*, nd.ho_ten 
                 FROM binhluan AS bl
@@ -26,10 +22,8 @@ class Comment extends Database {
         $conn = self::getConnection();
         
         try {
-            // Bắt đầu giao dịch (Transaction) để đảm bảo dữ liệu nhất quán
             $conn->beginTransaction();
 
-            // 1. Thêm bình luận mới vào bảng `binhluan`
             $sql_insert = "INSERT INTO binhluan (id_sanpham, id_nguoidung, noi_dung, danh_gia) 
                            VALUES (:id_sanpham, :id_nguoidung, :noi_dung, :danh_gia)";
             
@@ -43,8 +37,6 @@ class Comment extends Database {
             $stmt_insert = $conn->prepare($sql_insert);
             $stmt_insert->execute($params_insert);
 
-            // 2. Tính lại trung bình cộng và Cập nhật ngay vào bảng `sanpham`
-            // Lệnh này sẽ lấy trung bình cộng tất cả bình luận của sản phẩm đó và update vào cột avg_rating
             $sql_update_rating = "
                 UPDATE sanpham
                 SET avg_rating = (
@@ -55,7 +47,6 @@ class Comment extends Database {
                 WHERE id = :product_id_main
             ";
             
-            // Truyền tham số (dùng 2 tên khác nhau để tránh lỗi PDO ở một số phiên bản)
             $params_update = [
                 ':product_id'      => (int)$data['id_sanpham'],
                 ':product_id_main' => (int)$data['id_sanpham']
@@ -64,14 +55,11 @@ class Comment extends Database {
             $stmt_update = $conn->prepare($sql_update_rating);
             $stmt_update->execute($params_update);
 
-            // 3. Nếu mọi thứ thành công, lưu lại (Commit)
             $conn->commit();
             return true;
 
         } catch (Exception $e) {
-            // 4. Nếu có lỗi, hoàn tác (Rollback)
             $conn->rollBack();
-            // Nếu đang bật chế độ debug thì hiện lỗi
             if (defined('DEBUG_MODE') && DEBUG_MODE) {
                 echo "Lỗi Model Comment: " . $e->getMessage();
             }

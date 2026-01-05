@@ -1,34 +1,25 @@
-/* ======================================= */
-/* 1. KHU VỰC CHUNG & BIẾN CSS */
-/* ======================================= */
-
 :root {
-    /* Thiết lập biến màu sắc và giá trị chung */
-    --primary-color: #007bff; /* Màu xanh dương chủ đạo */
-    --secondary-color: #6c757d; /* Màu xám thứ cấp */
-    --accent-color: #dc3545; /* Màu đỏ nhấn (ví dụ: giá) */
-    --bg-light: #f8f9fa; /* Nền sáng */
-    --border-color: #e9ecef; /* Màu đường viền nhẹ */
-    --card-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05); /* Bóng đổ nhẹ cho card */
+   
+    --primary-color: #007bff; 
+    --secondary-color: #6c757d; 
+    --accent-color: #dc3545; 
+    --bg-light: #f8f9fa; 
+    --border-color: #e9ecef; 
+    --card-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05); 
 }
 
 body {
     background-color: var(--bg-light);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #343a40; /* Màu chữ mặc định */
+    color: #343a40;
 }
-
-/* ======================================= */
-/* 2. HEADER & FOOTER (CƠ BẢN) */
-/* ======================================= */
 
 .navbar-brand {
     font-weight: 700;
     font-size: 1.5rem;
-    color: #fff !important; /* Đảm bảo màu trắng */
+    color: #fff !important; 
 }
 
-/* Cải thiện ô tìm kiếm */
 .form-control:focus {
     box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
     border-color: var(--primary-color);

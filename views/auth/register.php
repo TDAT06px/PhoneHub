@@ -1,9 +1,6 @@
 <?php
-// /views/auth/register.php
-// Các biến $title, $error, $success được truyền từ AuthController::register()
 ?>
 <style>
-/* Slightly enlarge register layout specifically for register page */
 .auth-container { max-width: 880px; width: 100%; }
 .auth-card h2 { font-size: 2.2rem; }
 .auth-card .card-header h4 { font-size: 1.05rem; }

@@ -1,13 +1,7 @@
--- ========================================================
--- 1. KHỞI TẠO CƠ SỞ DỮ LIỆU
--- ========================================================
 DROP DATABASE IF EXISTS `DoAnCoSo2`;
 CREATE DATABASE `DoAnCoSo2` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE `DoAnCoSo2`;
 
--- ========================================================
--- 2. TẠO CẤU TRÚC BẢNG
--- ========================================================
 
 CREATE TABLE `nguoidung` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -23,7 +17,6 @@ CREATE TABLE `nguoidung` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Bảng Danh mục
 CREATE TABLE `danhmuc` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `parent_id` int(11) NULL DEFAULT NULL,
@@ -33,7 +26,6 @@ CREATE TABLE `danhmuc` (
   CONSTRAINT `fk_danhmuc_parent` FOREIGN KEY (`parent_id`) REFERENCES `danhmuc` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Bảng Sản phẩm (Có quản lý tồn kho: so_luong_ton)
 CREATE TABLE `sanpham` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `ten_sanpham` varchar(255) NOT NULL,
@@ -51,7 +43,6 @@ CREATE TABLE `sanpham` (
   CONSTRAINT `fk_sanpham_danhmuc` FOREIGN KEY (`id_danhmuc`) REFERENCES `danhmuc` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Bảng Đơn hàng (Quản lý doanh thu)
 CREATE TABLE `donhang` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `id_nguoidung` int(11) NOT NULL,
@@ -63,7 +54,6 @@ CREATE TABLE `donhang` (
   CONSTRAINT `fk_donhang_nguoidung` FOREIGN KEY (`id_nguoidung`) REFERENCES `nguoidung` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Bảng Chi tiết đơn hàng
 CREATE TABLE `donhang_chitiet` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `id_donhang` int(11) NOT NULL,
@@ -77,7 +67,6 @@ CREATE TABLE `donhang_chitiet` (
   CONSTRAINT `fk_chitiet_sanpham` FOREIGN KEY (`id_sanpham`) REFERENCES `sanpham` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Bảng Bình luận
 CREATE TABLE `binhluan` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `id_sanpham` int(11) NOT NULL,
@@ -92,18 +81,13 @@ CREATE TABLE `binhluan` (
   CONSTRAINT `fk_binhluan_sanpham` FOREIGN KEY (`id_sanpham`) REFERENCES `sanpham` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ========================================================
--- 3. THÊM DỮ LIỆU MẪU (SEEDING)
--- ========================================================
-
--- A. Người dùng (Mật khẩu mặc định là: 12345)
 INSERT INTO `nguoidung` (`id`, `ho_ten`, `email`, `mat_khau`, `role`, `trang_thai`) VALUES
 (1, 'Admin Quản Trị', 'admin@gmail.com', '$2y$10$fA.5.GL8.7.YmF2pb.OMz.IdRGHfF9.c.dJkWyBY/Tj91yD10fKjO', 'admin', 1),
 (2, 'Khách Hàng A', 'user@gmail.com', '$2y$10$fA.5.GL8.7.YmF2pb.OMz.IdRGHfF9.c.dJkWyBY/Tj91yD10fKjO', 'user', 1),
 (3, 'Nhân Viên Kho', 'staff@gmail.com', '$2y$10$fA.5.GL8.7.YmF2pb.OMz.IdRGHfF9.c.dJkWyBY/Tj91yD10fKjO', 'staff', 1),
 (4, 'User Bị Khóa', 'block@gmail.com', '$2y$10$fA.5.GL8.7.YmF2pb.OMz.IdRGHfF9.c.dJkWyBY/Tj91yD10fKjO', 'user', 0);
 
--- B. Danh mục (Cha & Con)
+
 INSERT INTO `danhmuc` (`id`, `parent_id`, `ten_danhmuc`) VALUES
 (1, NULL, 'Điện thoại'),
 (2, NULL, 'Laptop'),
@@ -120,7 +104,6 @@ INSERT INTO `danhmuc` (`id`, `parent_id`, `ten_danhmuc`) VALUES
 (13, 3, 'Sạc cáp'),
 (14, 3, 'Chuột & Phím');
 
--- C. Sản phẩm (Đầy đủ 50 sản phẩm)
 INSERT INTO `sanpham` (`id`, `ten_sanpham`, `gia`, `hinhanh`, `mo_ta`, `thong_so_ky_thuat`, `so_luong_ton`, `id_danhmuc`, `avg_rating`) VALUES
 -- iPhone (ID: 4)
 (1, 'iPhone 15 Pro Max 256GB', 34990000, 'iphone15promax.jpg', 'Khung Titan, Chip A17 Pro mạnh mẽ nhất.', 'Màn hình: 6.7 inch OLED\nChip: A17 Pro', 50, 4, 0),
@@ -182,7 +165,6 @@ INSERT INTO `sanpham` (`id`, `ten_sanpham`, `gia`, `hinhanh`, `mo_ta`, `thong_so
 (49, 'Đế tản nhiệt Laptop', 450000, 'coolermaster.jpg', 'Mát mẻ.', 'Quạt: 160mm', 150, 14, 0),
 (50, 'Bộ vệ sinh Laptop', 50000, 'bovesinh.jpg', 'Giữ thiết bị luôn sạch sẽ.', 'Gồm: 7 món', 1000, 14, 0);
 
--- D. Đơn hàng mẫu (Để test Dashboard và Admin Panel)
 INSERT INTO `donhang` (`id`, `id_nguoidung`, `tong_tien`, `trang_thai`, `ngay_tao`) VALUES
 (1, 2, 34990000, 'Đã giao', DATE_SUB(NOW(), INTERVAL 5 DAY)),
 (2, 2, 25990000, 'Đã giao', DATE_SUB(NOW(), INTERVAL 10 DAY)),
@@ -195,7 +177,6 @@ INSERT INTO `donhang` (`id`, `id_nguoidung`, `tong_tien`, `trang_thai`, `ngay_ta
 (9, 2, 22990000, 'Chờ xử lý', DATE_SUB(NOW(), INTERVAL 3 HOUR)),
 (10, 2, 11990000, 'Đã hủy', DATE_SUB(NOW(), INTERVAL 7 DAY));
 
--- Chi tiết đơn hàng mẫu
 INSERT INTO `donhang_chitiet` (`id_donhang`, `id_sanpham`, `so_luong`, `don_gia_luc_mua`) VALUES
 (1, 1, 1, 34990000),
 (2, 2, 1, 25990000),
@@ -208,7 +189,6 @@ INSERT INTO `donhang_chitiet` (`id_donhang`, `id_sanpham`, `so_luong`, `don_gia_
 (9, 7, 1, 22990000),
 (10, 6, 1, 11990000);
 
--- E. Bình luận mẫu
 INSERT INTO `binhluan` (`id_sanpham`, `id_nguoidung`, `noi_dung`, `danh_gia`) VALUES
 (1, 1, 'Sản phẩm tuyệt vời, đáng tiền!', 5), (1, 2, 'Màu titan đẹp lắm.', 5),
 (2, 1, 'Pin trâu thật sự.', 5),
@@ -261,9 +241,6 @@ INSERT INTO `binhluan` (`id_sanpham`, `id_nguoidung`, `noi_dung`, `danh_gia`) VA
 (49, 2, 'Giảm nhiệt tốt.', 4),
 (50, 1, 'Rẻ mà tiện.', 5);
 
--- ========================================================
--- 4. TÍNH ĐIỂM TRUNG BÌNH (AVG_RATING)
--- ========================================================
 SET SQL_SAFE_UPDATES = 0;
 UPDATE sanpham 
 SET avg_rating = (
@@ -272,5 +249,3 @@ SET avg_rating = (
     WHERE binhluan.id_sanpham = sanpham.id
 );
 SET SQL_SAFE_UPDATES = 1;
-
--- KẾT THÚC --

@@ -1,6 +1,4 @@
 <?php
-// /views/cart/view.php
-// Các biến $cart, $total_price được truyền từ CartController::view()
 ?>
 <h2 class="mb-4 text-center">🛒 Giỏ hàng của bạn</h2>
 

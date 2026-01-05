@@ -1,21 +1,14 @@
 <?php
-// /controllers/CartController.php
-
 class CartController extends Controller {
 
     private $cartModel;
     private $productModel;
 
     public function __construct() {
-        // Tải các model cần thiết
-        // Bỏ checkAuth() để cho phép thêm hàng khi chưa đăng nhập
         $this->cartModel = $this->loadModel('Cart');
         $this->productModel = $this->loadModel('Product');
     }
 
-    /**
-     * Thêm sản phẩm vào giỏ
-     */
     public function add($id = 0) {
         $id = (int)$id;
         if ($id > 0) {
@@ -24,9 +17,6 @@ class CartController extends Controller {
         $this->redirect('cart/view');
     }
 
-    /**
-     * Xóa 1 sản phẩm
-     */
     public function remove($id = 0) {
         $id = (int)$id;
         if ($id > 0) {
@@ -35,17 +25,11 @@ class CartController extends Controller {
         $this->redirect('cart/view');
     }
 
-    /**
-     * Xóa toàn bộ giỏ hàng
-     */
     public function clear() {
         $this->cartModel->clear();
         $this->redirect('cart/view');
     }
-    
-    /**
-     * Cập nhật số lượng (từ form giỏ hàng)
-     */
+
     public function update() {
         if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['qty'])) {
             foreach ($_POST['qty'] as $id => $qty) {
@@ -55,9 +39,6 @@ class CartController extends Controller {
         $this->redirect('cart/view');
     }
 
-    /**
-     * Hiển thị trang giỏ hàng
-     */
     public function view() {
         $cartItems = $this->cartModel->getContents();
 
@@ -98,30 +79,21 @@ class CartController extends Controller {
         $this->loadView('cart/view', $data);
     }
 
-    /**
-     * [CẬP NHẬT] Xử lý Đặt hàng & Phân loại thanh toán (COD/QR)
-     * URL: /cart/checkout
-     */
     public function checkout() {
-        // Bắt buộc đăng nhập để đặt hàng
         $this->checkAuth();
-        
-        // Chỉ xử lý khi submit form POST
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             $this->redirect('cart/view');
             return;
         }
 
         $user_id = $_SESSION['user']['id'];
-        $payment_method = $_POST['payment_method'] ?? 'cod'; // Lấy phương thức thanh toán
+        $payment_method = $_POST['payment_method'] ?? 'cod'; 
         
         $cartItems = $this->cartModel->getContents();
         if (empty($cartItems)) {
             $this->redirect('cart/view');
             return;
         }
-
-        // Tính toán lại tổng tiền để lưu vào DB
         $ids = array_keys($cartItems);
         $productsInCart = $this->productModel->getByIds($ids);
         $total_price = 0;
@@ -141,24 +113,17 @@ class CartController extends Controller {
 
         $orderModel = $this->loadModel('Order');
         
-        // Tạo đơn hàng
         if ($orderModel->create($user_id, $detailed_cart_for_order, $total_price)) {
             
-            // Lấy ID đơn hàng vừa tạo 
-            // (Lấy đơn mới nhất của user này để làm ID tạm thời nếu hàm create không trả về ID)
             $latestOrders = $orderModel->getOrdersByUserId($user_id);
             $latestOrder = $latestOrders[0] ?? null; 
             $order_id = $latestOrder['id'] ?? 0;
 
-            // Xóa giỏ hàng sau khi đặt thành công
             $this->cartModel->clear(); 
 
-            // ĐIỀU HƯỚNG DỰA TRÊN PHƯƠNG THỨC THANH TOÁN
             if ($payment_method === 'qr') {
-                // Nếu chọn QR -> Chuyển sang trang quét mã
                 $this->redirect("cart/payment/$order_id");
             } else {
-                // Nếu chọn COD -> Về trang lịch sử
                 $this->redirect('order/history');
             }
 
@@ -167,10 +132,6 @@ class CartController extends Controller {
         }
     }
 
-    /**
-     * [MỚI] Hiển thị trang thanh toán QR
-     * URL: /cart/payment/5
-     */
     public function payment($order_id = 0) {
         $order_id = (int)$order_id;
         $this->checkAuth();
@@ -188,7 +149,7 @@ class CartController extends Controller {
         }
 
         if (!$order) {
-            $this->redirect('order/history'); // Không tìm thấy đơn thì đá về lịch sử
+            $this->redirect('order/history'); 
             return;
         }
 

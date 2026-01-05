@@ -1,6 +1,4 @@
 <?php
-// /views/order/detail.php
-// Biến $order (thông tin chung) và $details (sản phẩm) được truyền từ Controller
 ?>
 
 <div class="d-flex justify-content-between align-items-center mb-3">

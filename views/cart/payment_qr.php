@@ -1,13 +1,12 @@
 <?php
 
 $BANK_ID = 'MB'; 
-$ACCOUNT_NO = '0000123456789'; 
+$ACCOUNT_NO = '0337302365'; 
 $ACCOUNT_NAME = 'Lê Công Tiến Đạt'; 
 
 $description = "DH" . $order['id'];
 $amount = $order['tong_tien'];
 
-// Link tạo QR của VietQR
 $qr_url = "https://img.vietqr.io/image/{$BANK_ID}-{$ACCOUNT_NO}-compact2.png?amount={$amount}&addInfo={$description}&accountName={$ACCOUNT_NAME}";
 ?>
 

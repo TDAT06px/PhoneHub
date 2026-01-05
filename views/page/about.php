@@ -1,9 +1,7 @@
 <?php
-// views/page/about.php
 ?>
 
 <style>
-    /* CSS riêng cho trang About */
     .carousel-item img {
         height: 400px; 
         object-fit: cover;

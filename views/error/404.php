@@ -11,7 +11,7 @@
             width: 100%;
             margin: 0px;
             background: linear-gradient(90deg, #2f3640 23%, #181b20 100%);
-            overflow: hidden; /* Ẩn thanh cuộn */
+            overflow: hidden;
             font-family: 'Righteous', cursive;
         }
 
@@ -68,7 +68,7 @@
         .error {
             position: absolute;
             left: 100px;
-            top: 50%; /* Canh giữa theo chiều dọc */
+            top: 50%;
             transform: translateY(-50%);
             z-index: 10;
             color: #363e49;
@@ -79,7 +79,7 @@
         .error__description { opacity: 0.5; margin-bottom: 20px; }
 
         .error__button {
-            display: inline-block; /* Để dùng thẻ a */
+            display: inline-block;
             min-width: 7em;
             margin-top: 3em;
             margin-right: 0.5em;
@@ -92,7 +92,7 @@
             cursor: pointer;
             transition-duration: 0.2s;
             font-size: 0.75em;
-            text-decoration: none; /* Bỏ gạch chân thẻ a */
+            text-decoration: none;
             text-align: center;
         }
 
@@ -119,7 +119,6 @@
             z-index: 5;
         }
 
-        /* Các phần của phi hành gia */
         .astronaut__head { background-color: white; position: absolute; top: 60px; left: 60px; width: 60px; height: 60px; border-radius: 2em; }
         .astronaut__head-visor-flare1 { background-color: #7f8fa6; position: absolute; top: 28px; left: 40px; width: 10px; height: 10px; border-radius: 2em; opacity: 0.5; }
         .astronaut__head-visor-flare2 { background-color: #718093; position: absolute; top: 40px; left: 38px; width: 5px; height: 5px; border-radius: 2em; opacity: 0.3; }

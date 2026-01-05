@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/auth.css">
     
     <style>
-        /* ========== AUTH LAYOUT STYLING ========== */
         body.auth-page {
             background: linear-gradient(135deg, #E91E63 0%, #FF4081 100%);
             min-height: 100vh;
@@ -195,7 +194,6 @@
             }
         }
 
-        /* ========== ANIMATION ========== */
         .auth-card {
             animation: slideUp 0.5s ease-out;
         }

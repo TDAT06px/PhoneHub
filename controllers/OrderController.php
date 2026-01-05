@@ -1,5 +1,4 @@
 <?php
-// /controllers/OrderController.php
 
 class OrderController extends Controller {
 
@@ -17,7 +16,6 @@ class OrderController extends Controller {
     public function history() {
         $user_id = $_SESSION['user']['id'];
         
-        // Lấy tất cả đơn hàng của user
         $orders = $this->orderModel->getOrdersByUserId($user_id);
 
         $data = [
@@ -36,16 +34,13 @@ class OrderController extends Controller {
         $order_id = (int)$order_id;
         $user_id = $_SESSION['user']['id'];
         
-        // Lấy thông tin chung của đơn hàng (để kiểm tra đúng chủ)
         $order_info = $this->orderModel->getOrderById($order_id, $user_id);
         
-        // Nếu không tìm thấy đơn hoặc không đúng chủ
         if (!$order_info) {
             $this->redirect('order/history');
             return;
         }
         
-        // Lấy các sản phẩm chi tiết của đơn
         $order_details = $this->orderModel->getOrderDetails($order_id);
         
         $data = [

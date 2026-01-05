@@ -47,7 +47,6 @@
 </div>
 
 
-<!-- Create User Modal -->
 <div class="modal fade" id="createUserModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
@@ -84,7 +83,6 @@
     </div>
 </div>
 
-<!-- Change Password Modal (single, populated by JS) -->
 <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">

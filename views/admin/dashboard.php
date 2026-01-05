@@ -159,7 +159,6 @@
                         <td>
                             <?php 
                             $trang_thai = $order['trang_thai'] ?? 'Chưa xác định';
-                            // Xác định màu badge dựa trên trạng thái
                             $badge_class = 'bg-soft-warning text-warning border-warning';
                             if ($trang_thai === 'Đã giao') {
                                 $badge_class = 'bg-soft-success text-success border-success';
@@ -185,7 +184,6 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-    // Kiểm tra Chart.js đã được tải chưa
     if (typeof Chart === 'undefined') {
         console.error('Chart.js library chưa được tải. Vui lòng kiểm tra lại.');
         return;
@@ -200,11 +198,9 @@ document.addEventListener("DOMContentLoaded", function() {
     try {
         const ctx = chartElement.getContext('2d');
         
-        // Dữ liệu từ PHP truyền sang
         const chartData = <?= $chart_data ?? '[]' ?>;
         const chartLabels = <?= $chart_labels ?? '[]' ?>;
 
-        // Kiểm tra dữ liệu hợp lệ
         if (!Array.isArray(chartData) || !Array.isArray(chartLabels)) {
             console.error('Dữ liệu biểu đồ không hợp lệ.');
             return;

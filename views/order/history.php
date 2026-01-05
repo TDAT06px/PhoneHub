@@ -1,6 +1,4 @@
 <?php
-// /views/order/history.php
-// Biến $orders được truyền từ OrderController::history()
 ?>
 <h2 class="mb-4">📅 Lịch sử mua hàng</h2>
 

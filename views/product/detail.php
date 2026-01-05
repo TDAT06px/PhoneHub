@@ -1,5 +1,4 @@
 <?php
-// views/product/detail.php
 ?>
 
 <div class="row mb-5">

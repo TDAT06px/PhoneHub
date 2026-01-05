@@ -1,6 +1,4 @@
 <?php
-// views/admin/order_detail.php
-// Variables: $order, $details
 ?>
 <div class="card shadow border-0">
     <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">

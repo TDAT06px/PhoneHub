@@ -8,7 +8,7 @@
                     <h5 class="text-uppercase fw-bold mb-3 text-primary">ShopPhoneHub</h5>
                     <p class="small text-white-50">Cửa hàng bán lẻ các sản phẩm công nghệ và phụ kiện chính hãng.</p>
                     <ul class="list-unstyled small">
-                        <li><i class="fas fa-map-marker-alt me-2"></i> 123 Đường ABC, Quận XYZ, TP. Đà Nẵng</li>
+                        <li><i class="fas fa-map-marker-alt me-2"></i> 123 Đường ABC, Ngũ Hành Sơn, TP. Đà Nẵng</li>
                         <li><i class="fas fa-phone me-2"></i> +84 901 234 567</li>
                         <li><i class="fas fa-envelope me-2"></i> support@shopdemo.vn</li>
                     </ul>

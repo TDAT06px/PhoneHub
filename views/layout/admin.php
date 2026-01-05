@@ -39,7 +39,6 @@
         <ul class="components">
             <li><a href="<?= BASE_URL ?>/admin/dashboard" class="<?= (strpos($_SERVER['REQUEST_URI'], 'dashboard')!==false)?'active':'' ?>"><i class="fas fa-chart-pie me-2"></i> Tổng quan</a></li>
             <li><a href="<?= BASE_URL ?>/admin/orders" class="<?= (strpos($_SERVER['REQUEST_URI'], 'orders')!==false)?'active':'' ?>"><i class="fas fa-shopping-cart me-2"></i> Đơn hàng</a></li>
-            <!-- 'Xem trang Sản phẩm' removed as requested -->
             <li><a href="<?= BASE_URL ?>/admin/users" class="<?= (strpos($_SERVER['REQUEST_URI'], 'users')!==false)?'active':'' ?>"><i class="fas fa-users me-2"></i> Nhân sự</a></li>
             <li><a href="<?= BASE_URL ?>/admin/inventory" class="<?= (strpos($_SERVER['REQUEST_URI'], 'inventory')!==false)?'active':'' ?>"><i class="fas fa-warehouse me-2"></i> Kho hàng</a></li>
             <li><a href="<?= BASE_URL ?>/admin/revenue" class="<?= (strpos($_SERVER['REQUEST_URI'], 'revenue')!==false)?'active':'' ?>"><i class="fas fa-coins me-2"></i> Doanh thu</a></li>
@@ -65,7 +64,6 @@
 
         <div class="main-content">
             <?php 
-                // Phần này sẽ hiển thị nội dung của các trang con (dashboard, orders...)
                 if (isset($child_view) && file_exists($child_view)) {
                     require_once $child_view;
                 } else {

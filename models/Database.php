@@ -1,18 +1,10 @@
 <?php
-// /models/Database.php
 
 class Database {
-    // Thuộc tính chứa kết nối CSDL
     private static $conn = null;
 
-    /**
-     * Phương thức kết nối CSDL
-     * Chỉ kết nối 1 lần duy nhất (Singleton Pattern)
-     */
     public static function getConnection() {
-        // Nếu chưa kết nối thì mới thực hiện kết nối
         if (self::$conn === null) {
-            // Lấy thông tin kết nối từ file config
             $host = DB_HOST;
             $db_name = DB_NAME;
             $username = DB_USER;
@@ -28,15 +20,12 @@ class Database {
             ];
 
             try {
-                // Tạo đối tượng PDO
                 self::$conn = new PDO($dsn, $username, $password, $options);
             } catch (PDOException $e) {
-                // Nếu có lỗi thì dừng chương trình
                 die("Lỗi kết nối CSDL: " . $e->getMessage());
             }
         }
         
-        // Trả về kết nối đã có
         return self::$conn;
     }
 
@@ -57,7 +46,6 @@ class Database {
             }
             return $stmt->fetch();
         } catch (PDOException $e) {
-            // Xử lý lỗi (ví dụ: log lỗi)
             if (DEBUG_MODE) {
                 echo "Lỗi truy vấn: " . $e->getMessage();
             }
@@ -112,14 +100,7 @@ class Database {
         return self::getConnection()->lastInsertId();
     }
 
-    // --- INSTANCE METHODS (hỗ trợ gọi như $db->query() thông qua __call) ---
-    
-    /**
-     * Magic method để hỗ trợ instance calls cho static methods
-     * Cho phép gọi $db->query() và $db->execute() như instance methods
-     */
     public function __call($method, $args) {
-        // Chỉ cho phép query và execute
         if (in_array($method, ['query', 'execute'])) {
             return call_user_func_array([self::class, $method], $args);
         }

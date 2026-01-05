@@ -1,5 +1,4 @@
 <?php
-// views/auth/reset.php
 ?>
 <div class="auth-card">
     <div class="card-header">
